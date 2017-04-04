@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_icons">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/accent_color"
+        android:layout_gravity="center">
+
+        <com.mudtusuario.custom.CustomTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_icons"
+            android:padding="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold"/>
+
+    </FrameLayout>
+
+    <com.mudtusuario.custom.CustomTextView
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="@color/primary_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"/>
+
+    <com.mudtusuario.custom.CustomButton
+        android:id="@+id/action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/text_icons"
+        android:textColor="@color/accent_color"/>
+
+</LinearLayout>

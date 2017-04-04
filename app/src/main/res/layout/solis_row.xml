@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/text_icons">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.25"
+            android:layout_height="wrap_content">
+
+            <com.mudtusuario.custom.RoundedImageView
+                android:id="@+id/img"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.45"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="5dp">
+
+            <com.mudtusuario.custom.CustomTextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                android:text="nombre"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+
+                <ImageView
+                    android:id="@+id/img_cat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/categoria_a"/>
+
+                <com.mudtusuario.custom.CustomTextView
+                    android:id="@+id/placas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text"
+                    android:text="placas"/>
+
+            </LinearLayout>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:text="fecha"/>
+
+        </LinearLayout>
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/info"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="40dp"
+            android:background="@drawable/wth_btn"
+            android:textColor="@color/accent_color"
+            android:text="@string/sol_btn"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_inicio"/>
+
+        <com.mudtusuario.custom.CustomTextView
+            android:id="@+id/loc_ini"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_text"
+            android:layout_margin="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fin"/>
+
+        <com.mudtusuario.custom.CustomTextView
+            android:id="@+id/loc_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_text"
+            android:layout_margin="5dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

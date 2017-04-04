@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_icons">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.mudtusuario.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:text="@string/init_mud_txt"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/subContent"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@+id/indicators"
+                android:layout_above="@+id/buttons" />
+
+            <com.mudtusuario.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:text="@string/init_mud_pp"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearance"
+                android:background="@color/back_color"
+                android:padding="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp">
+
+                <com.mudtusuario.custom.CustomTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text"
+                    android:text="@string/init_mud_ub_ini"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_urecogida"
+                    android:layout_gravity="right"/>
+
+            </LinearLayout>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:id="@+id/carga_dir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:text=""
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearance"
+                android:background="@drawable/black_rec"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"/>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/piso_carga"
+                        android:textColor="@color/primary_text"
+                        android:textStyle="bold"/>
+
+                    <com.mudtusuario.custom.CustomEditText
+                        android:id="@+id/piso_carga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:hint="@string/piso_carga_hint"
+                        android:textColorHint="@color/secondary_text"
+                        android:background="@drawable/black_rec"
+                        android:padding="10dp"
+                        android:layout_marginTop="5dp"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="5dp">
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/elev_carga"
+                        android:textColor="@color/primary_text"
+                        android:textStyle="bold"/>
+
+                    <com.mudtusuario.custom.CustomEditText
+                        android:id="@+id/elev_carga"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:hint="@string/piso_carga_hint"
+                        android:textColorHint="@color/secondary_text"
+                        android:background="@drawable/black_rec"
+                        android:padding="10dp"
+                        android:layout_marginTop="5dp"
+                        android:inputType="text"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fecha"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_tiempo"/>
+
+                <com.mudtusuario.custom.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dom 22 Nov, 9:30 am"
+                    android:textColor="@color/primary_text"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"/>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/divider_color"/>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

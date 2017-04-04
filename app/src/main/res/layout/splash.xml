@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_bg">
+
+    <com.mudtusuario.custom.CustomTextView
+        android:id="@+id/copy_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/copy_b"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/text_icons"/>
+
+    <com.mudtusuario.custom.CustomTextView
+        android:id="@+id/copy_a"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/copy_a"
+        android:textStyle="bold"
+        android:textColor="@color/text_icons"
+        android:layout_above="@+id/copy_b"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/ico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mudt_logo_splash"
+        android:layout_marginTop="82dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/splash_login_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/text_icons"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/splash_btn"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="25sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/primary_color"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/wth_btn"/>
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/reg_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_bg"
+            android:textColor="@color/text_icons"
+            android:text="@string/splash_btn_reg"
+            android:textSize="25sp"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="30dp"
+            android:elevation="5dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

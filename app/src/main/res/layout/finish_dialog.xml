@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_icons">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.75"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.mudtusuario.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Última mudanza"
+                android:textColor="@color/primary_text"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"/>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="00 Dic, Domingo, 00:00 AM"
+                android:textColor="@color/primary_text"
+                android:textAppearance="?android:attr/textAppearance"/>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.25"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <com.mudtusuario.custom.CustomButton
+                android:id="@+id/help"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/wth_rec"
+                android:text="@string/help"
+                android:textColor="@color/secondary_text"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <com.mudtusuario.custom.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cliente"
+        android:textColor="@color/primary_text"
+        android:textAppearance="?android:attr/textAppearance"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <com.mudtusuario.custom.CustomTextView
+        android:id="@+id/client"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre Cliente"
+        android:textColor="@color/primary_text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+
+        <com.mudtusuario.custom.RoundedImageView
+            android:id="@+id/client_pic"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <com.mudtusuario.custom.CustomEditText
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:hint="Comentarios de la mudanza"
+        android:id="@+id/edit_desc"
+        android:textColor="@color/secondary_text"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/wth_rec"
+        android:inputType="text|textMultiLine"
+        android:gravity="top|left"
+        android:scrollbars="vertical"
+        android:lines="8"
+        android:maxLines="6"
+        android:padding="5dp"
+        android:textColorHint="@color/secondary_text"/>
+
+    <com.mudtusuario.custom.CustomButton
+        android:id="@+id/ok_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/accent_color"
+        android:textColor="@color/text_icons"
+        android:text="@string/ok_dialog"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>

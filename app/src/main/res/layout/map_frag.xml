@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <LinearLayout
+        android:id="@+id/footLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@color/text_icons">
+
+        <LinearLayout
+            android:id="@+id/init_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/text_icons"
+            android:layout_margin="15dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <ImageView
+                android:src="@drawable/ic_inicio"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:layout_height="wrap_content" />
+
+            <com.mudtusuario.custom.CustomTextView
+                android:id="@+id/init_point_txt"
+                android:layout_width="0dp"
+                android:layout_weight="0.9"
+                android:layout_height="wrap_content"
+                android:text="@string/init_point"
+                android:textColor="@color/divider_color"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/end_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/text_icons"
+            android:layout_margin="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:src="@drawable/ic_fin"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:layout_height="wrap_content" />
+
+            <com.mudtusuario.custom.CustomTextView
+                android:id="@+id/end_point_txt"
+                android:layout_width="0dp"
+                android:layout_weight="0.9"
+                android:layout_height="wrap_content"
+                android:text="@string/end_point"
+                android:textColor="@color/divider_color"/>
+
+        </LinearLayout>
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/req_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_icons"
+            android:text="@string/req_btn"
+            android:background="@drawable/orange_btn"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/info_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorAccent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:src="@drawable/stat_sys_certificate_info"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"/>
+
+        <com.mudtusuario.custom.CustomTextView
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:text="@string/info_map"
+            android:textColor="@color/text_icons"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginRight="5dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

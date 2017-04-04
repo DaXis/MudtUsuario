@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_icons">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:layout_gravity="center_vertical|right"
+        android:gravity="center_vertical|right">
+
+        <ImageView
+            android:src="@drawable/aliquam_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <com.mudtusuario.custom.CustomTextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resum"
+            android:textColor="@color/primary_text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:src="@drawable/mudt_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/web"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/copy_a"
+            android:background="@color/text_icons"/>
+
+        <com.mudtusuario.custom.CustomTextView
+            android:id="@+id/copy_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copy_b"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/primary_text"/>
+
+        <com.mudtusuario.custom.CustomTextView
+            android:id="@+id/copy_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copy_a"
+            android:textStyle="bold"
+            android:textColor="@color/primary_text"
+            android:layout_above="@+id/copy_b"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>

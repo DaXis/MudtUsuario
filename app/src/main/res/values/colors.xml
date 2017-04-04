@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primary_color">#ff8200</color>
+    <color name="dark_primary_color">#FF4C636E</color>
+    <color name="light_primary_color">#ffb525</color>
+    <color name="text_icons">#FFFFFF</color>
+    <!--<color name="accent_color">#4a90e2</color>-->
+    <color name="accent_color">#ff8200</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#606060</color>
+    <color name="divider_color">#B6B6B6</color>
+
+    <color name="color_accent">#4a90e2</color>
+    <color name="color_success">#3CCD88</color>
+    <color name="color_error">#f44336</color>
+
+    <color name="transparent">@android:color/transparent</color>
+    <color name="TransparentGrey">#7F000000</color>
+
+    <color name="back_color">#c6dcc9</color>
+    <color name="unselect">#c1e8af</color>
+    <color name="pager_back">#4e7a54</color>
+
+    <color name="yellow">#FFFF00</color>
+    <color name="orange">#FF8C00</color>
+
+    <color name="active">#30ae5c</color>
+    <color name="inactive">#f13d30</color>
+
+    <color name="verde_limon">#7ED321</color>
+    <color name="azul_cielo">#4A90E2</color>
+    <color name="gris_app">#607D8B</color>
+    <color name="text_app">#AFAFAF</color>
+    <color name="azul_claro">#96c6ff</color>
+
+    <color name="evaluatest">#2c4f91</color>
+    <color name="linkedin">#2c7bb0</color>
+    <color name="lithe_color">#f2f2f2</color>
+    <color name="green_litte">#44dcb1</color>
+
+    <color name="dialog_bg">#f6f7fb</color>
+
+    <color name="fb_color">#3b4c9b</color>
+    <color name="in_color">#2b7ab2</color>
+
+    <color name="load_bg">#90FFFFFF</color>
+    <color name="verde_limon_top">#BB7ED321</color>
+
+    <color name="config_bg">#f6f7fb</color>
+    <color name="eval">#ffad00</color>
+
+    <color name="colorPrimary">#ff8200</color>
+    <color name="colorPrimaryDark">#30ae5c</color>
+    <color name="colorAccent">#ffb525</color>
+
+</resources>
