@@ -74,4 +74,13 @@
     <string name="piso_carga_hint">Planta baja</string>
     <string name="fecha">Hora y día de carga</string>
     <string name="pass_confirm_hint">Confirma tu contraseña</string>
+    <string name="moths_title">Selecciona el mes</string>
+    <string name="mudt_desc">Descripción de mobiliario</string>
+    <string name="mudt_desc_hint">Que tipo de inmueble contiene...</string>
+    <string name="end_mud_pp">PUNTO DE LLEGADA</string>
+    <string name="init_mud_ub_end">Ubicación de descarga</string>
+    <string name="solic_btn">Solicitar mudanza</string>
+    <string name="elevator_have">¿Tiene elevador?</string>
+    <string name="elev_carga_hint">¿Tiene elevador?</string>
+    <string name="btn_confirm">CONFIRMAR SOLICITUD</string>
 </resources>

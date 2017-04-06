@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.mudtusuario.fragments.AboutFragment;
 import com.mudtusuario.fragments.HistorialFragment;
+import com.mudtusuario.fragments.InitMudFragment;
 import com.mudtusuario.fragments.LoginFragment;
 import com.mudtusuario.fragments.MainFragment;
 import com.mudtusuario.fragments.MapFragment;
@@ -260,6 +261,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     initMainFragment();
                 else if(Singleton.getCurrentFragment().getClass() == AboutFragment.class)
                     onBackPressed();
+                else if(Singleton.getCurrentFragment().getClass() == InitMudFragment.class)
+                    onBackPressed();
                 break;
             case R.id.menu_solis:
                 openCloseDrawer();
@@ -282,8 +285,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.menu_close:
                 openCloseDrawer();
-                /*Singleton.saveSettings("login_json", "");
-                Singleton.saveSettings("login_flag", false);*/
+                Singleton.saveSettings("login_json", "");
+                Singleton.saveSettings("login_flag", false);
                 mainIntent();
             break;
         }
@@ -321,6 +324,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             initMapFragment();
         else if(Singleton.getCurrentFragment().getClass() == ViajeDetailFragment.class)
             super.onBackPressed();
+        else if(Singleton.getCurrentFragment().getClass() == RegisterFragment.class)
+            initLoginFragment();
         else
             super.onBackPressed();
     }

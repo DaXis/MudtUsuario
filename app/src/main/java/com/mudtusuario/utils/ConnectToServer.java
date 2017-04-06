@@ -10,6 +10,7 @@ import com.mudtusuario.fragments.HistorialFragment;
 import com.mudtusuario.fragments.InitMudFragment;
 import com.mudtusuario.fragments.LoginFragment;
 import com.mudtusuario.fragments.MainFragment;
+import com.mudtusuario.fragments.MapFragment;
 import com.mudtusuario.fragments.ProcessFragment;
 import com.mudtusuario.fragments.RegisterFragment;
 import com.mudtusuario.fragments.SolicitudFragment;
@@ -262,6 +263,81 @@ public class ConnectToServer {
         }
     }
 
+    //++++++++++++++++++
+    public ConnectToServer(Object[] args, String flag){
+        new ConnectDirAsync().executeOnExecutor(Singleton.getsExecutor(), args);
+    }
+
+    private class ConnectDirAsync extends AsyncTask<Object[], String, String> {
+
+        private Object[] aux;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            System.gc();
+        }
+
+        @Override
+        protected String doInBackground(Object[]... params) {
+            aux = params[0];
+            String sUrl = (String)aux[0], result = "";
+            sUrl = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+sUrl+"&sensor=true";
+            //JSONObject json = (JSONObject)aux[3];
+            Log.d("ConnectToServer_URL --->", sUrl);
+
+            //with timeout
+            //HttpClient httpclient = new DefaultHttpClient(setTimeOut());
+
+            //without timeout
+            //HttpClient httpclient = new DefaultHttpClient();
+
+            //with https
+            HttpClient httpclient = getNewHttpClient();
+
+            HttpPost httppost = new HttpPost(sUrl);
+
+            try {
+                //Log.d("json send", json.toString());
+                //StringEntity se = new StringEntity(json.toString());
+
+                //httppost.setEntity(se);
+                /*httppost.setHeader("Accept", "application/json");
+                httppost.setHeader("Content-type", "application/json");
+                if(Singleton.getTokenObj() != null)
+                    httppost.setHeader("Authorization", "OAuth "+Singleton.getTokenObj().access_token);
+                else
+                    httppost.setHeader("Authorization", "OAuth ");
+                httppost.setHeader("GENEXUS-AGENT", "SmartDevice Application");*/
+
+                // Execute HTTP Post Request
+                org.apache.http.HttpResponse response = httpclient.execute(httppost);
+                result = getResponse(response);
+
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+            }
+
+            return result;
+        }
+
+        protected void onProgressUpdate(String... progress) {
+            Log.d("ANDRO_ASYNC", progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("ConnectToServer_onPostExecute "+aux[0], " "+result);
+
+            decideMethod((int)aux[1], aux[2], result);
+
+            System.gc();
+        }
+    }
+    //++++++++++++++++++
+
     private String getResponse(org.apache.http.HttpResponse response){
         StringBuilder sb = new StringBuilder();
         try {
@@ -369,6 +445,12 @@ public class ConnectToServer {
                 break;
             case 14:
                 ((InitMudFragment) o).getResponse(result);
+                break;
+            case 15:
+                ((InitMudFragment) o).getMudtResponse(result);
+                break;
+            case 16:
+                ((MapFragment) o).getDirFromLtLn(result);
                 break;
         }
     }

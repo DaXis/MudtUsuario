@@ -31,6 +31,7 @@ import com.mudtusuario.objs.UserObj;
 import com.mudtusuario.utils.ConnectToServer;
 import com.mudtusuario.utils.DirectionsJSONParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,6 +57,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
     private LatLng pointIni, pointEnd;
     private String ROUTE_MODE= "mode=driving";
     private MudUsObj mudObj;
+    private Marker current;
+    //private String aux;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,8 +154,10 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                if(marker.getTitle().contains("Usar esta como ubicación inicial")){
-                    String aux = getDirFromLtLn(marker.getPosition());
+                current = marker;
+                initDirConnection(marker.getPosition());
+                /*if(marker.getTitle().contains("Usar esta como ubicación inicial")){
+                    //String aux = getDirFromLtLn(marker.getPosition());
                     if(aux.contains("Error")) {
                         init_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
                         init_point_txt.setText(aux);
@@ -167,7 +172,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                         mudObj.carga_lon = marker.getPosition().longitude;
                     }
                 } else {
-                    String aux = getDirFromLtLn(marker.getPosition());
+                    //String aux = getDirFromLtLn(marker.getPosition());
                     if(aux.contains("Error")) {
                         end_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
                         end_point_txt.setText(aux);
@@ -185,7 +190,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                         mudObj.des_lat = marker.getPosition().latitude;
                         mudObj.des_lon = marker.getPosition().longitude;
                     }
-                }
+                }*/
             }
         });
 
@@ -225,8 +230,61 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         googleMap.addMarker(markerOptions);
     }
 
-    private String getDirFromLtLn(LatLng latLng){
+    private void initDirConnection(LatLng latLng){
+        Singleton.showLoadDialog(getFragmentManager());
+        Object[] objs = new Object[]{latLng.latitude+","+latLng.longitude, 16, this};
+        ConnectToServer connectToServer = new ConnectToServer(objs, "");
+    }
+
+    public void getDirFromLtLn(String result){
+        String aux = "";
         try {
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray results = jsonObject.getJSONArray("results");
+            JSONObject dir = results.getJSONObject(0);
+            aux = dir.getString("formatted_address");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            aux = "Error";
+        }
+        Singleton.dissmissLoad();
+
+        if(current.getTitle().contains("Usar esta como ubicación inicial")){
+            //String aux = getDirFromLtLn(marker.getPosition());
+            if(aux.contains("Error")) {
+                init_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
+                init_point_txt.setText(aux);
+                end_point.setVisibility(View.GONE);
+            } else {
+                init_point_txt.setTextColor(getResources().getColor(R.color.primary_text));
+                init_point_txt.setText(aux);
+                end_point.setVisibility(View.VISIBLE);
+                pointIni = current.getPosition();
+                mudObj.carga_dir = aux;
+                mudObj.carga_lat = current.getPosition().latitude;
+                mudObj.carga_lon = current.getPosition().longitude;
+            }
+        } else {
+            //String aux = getDirFromLtLn(marker.getPosition());
+            if(aux.contains("Error")) {
+                end_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
+                end_point_txt.setText(aux);
+                req_btn.setVisibility(View.GONE);
+            } else {
+                end_point_txt.setTextColor(getResources().getColor(R.color.primary_text));
+                end_point_txt.setText(aux);
+                req_btn.setVisibility(View.VISIBLE);
+                pointEnd = current.getPosition();
+                ArrayList<LatLng> aux0 = new ArrayList<LatLng>();
+                aux0.add(pointEnd);
+                drawLocationsRoutes(pointIni, aux0);
+                info_map.setVisibility(View.VISIBLE);
+                mudObj.des_dir = aux;
+                mudObj.des_lat = current.getPosition().latitude;
+                mudObj.des_lon = current.getPosition().longitude;
+            }
+        }
+        /*try {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(getActivity(), Locale.getDefault());
@@ -241,7 +299,26 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         } catch (IOException e) {
             e.printStackTrace();
             return "Error";
+        }*/
+
+        /*try {
+            Geocoder geo = new Geocoder(getActivity(), Locale.getDefault());
+            List<Address> addresses = geo.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (addresses.isEmpty()) {
+                return "Esperando la dirección";
+            }
+            else {
+                if (addresses.size() > 0) {
+                    return addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " +
+                            addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName();
+                } else
+                    return "Algo";
+            }
         }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "Algo";
+        }*/
     }
 
     //**************************************************

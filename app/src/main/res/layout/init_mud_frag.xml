@@ -44,7 +44,8 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearance"
                 android:background="@color/back_color"
-                android:padding="10dp"/>
+                android:padding="10dp"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -134,15 +135,15 @@
                         android:textColor="@color/primary_text"
                         android:textStyle="bold"/>
 
-                    <com.mudtusuario.custom.CustomEditText
+                    <com.mudtusuario.custom.CustomTextView
                         android:id="@+id/elev_carga"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primary_text"
-                        android:hint="@string/piso_carga_hint"
+                        android:hint="@string/elev_carga_hint"
                         android:textColorHint="@color/secondary_text"
                         android:background="@drawable/black_rec"
-                        android:padding="10dp"
+                        android:padding="12dp"
                         android:layout_marginTop="5dp"
                         android:inputType="text"/>
 
@@ -174,6 +175,7 @@
                     android:src="@drawable/ic_tiempo"/>
 
                 <com.mudtusuario.custom.CustomTextView
+                    android:id="@+id/completeDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Dom 22 Nov, 9:30 am"
@@ -190,7 +192,354 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/divider_color"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="15dp"
+                android:layout_gravity="center"
+                android:gravity="center">
 
+                <LinearLayout
+                    android:id="@+id/days_lay"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/past_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.mudtusuario.custom.CustomTextView
+                            android:id="@+id/day_past"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearance"
+                            android:text="Día"
+                            android:textColor="@color/azul_claro"/>
+                        <com.mudtusuario.custom.CustomTextView
+                            android:id="@+id/day_mes_past"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Día"
+                            android:textColor="@color/azul_claro"/>
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/primary_color"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/current_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.mudtusuario.custom.CustomTextView
+                            android:id="@+id/day"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearance"
+                            android:text="Día"
+                            android:textColor="@color/primary_text"
+                            android:textStyle="bold"/>
+                        <com.mudtusuario.custom.CustomTextView
+                            android:id="@+id/day_mes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Día"
+                            android:textColor="@color/primary_text"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/primary_color"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/next_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.mudtusuario.custom.CustomTextView
+                            android:id="@+id/day_next"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearance"
+                            android:text="Día"
+                            android:textColor="@color/azul_claro"/>
+                        <com.mudtusuario.custom.CustomTextView
+                            android:id="@+id/day_mes_next"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Día"
+                            android:textColor="@color/azul_claro"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/hour_lay"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp">
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:id="@+id/hour_past"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Horas"
+                        android:textColor="@color/azul_claro"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/primary_color"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:id="@+id/hour"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Horas"
+                        android:textColor="@color/primary_text"
+                        android:textStyle="bold"
+                        android:paddingTop="16dp"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/primary_color"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:id="@+id/hour_next"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Horas"
+                        android:textColor="@color/azul_claro"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/min_lay"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:id="@+id/min_past"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Minutos"
+                        android:textColor="@color/azul_claro"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/primary_color"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:id="@+id/min"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Minutos"
+                        android:textColor="@color/primary_text"
+                        android:textStyle="bold"
+                        android:paddingTop="16dp"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/primary_color"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:id="@+id/min_next"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Minutos"
+                        android:textColor="@color/azul_claro"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/mudt_desc"
+                android:textColor="@color/primary_text"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"/>
+
+            <com.mudtusuario.custom.CustomEditText
+                android:id="@+id/mudt_desc"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:textColor="@color/primary_text"
+                android:hint="@string/mudt_desc_hint"
+                android:textColorHint="@color/secondary_text"
+                android:background="@drawable/black_rec"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:inputType="text"
+                android:gravity="top|left"
+                android:scrollbars="vertical"
+                android:lines="8"
+                android:maxLines="6"/>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:text="@string/end_mud_pp"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearance"
+                android:background="@color/back_color"
+                android:padding="10dp"
+                android:textStyle="bold"/>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:text="@string/init_mud_ub_end"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"/>
+
+            <com.mudtusuario.custom.CustomTextView
+                android:id="@+id/desc_dir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text"
+                android:text=""
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearance"
+                android:background="@drawable/black_rec"
+                android:padding="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/piso_carga"
+                        android:textColor="@color/primary_text"
+                        android:textStyle="bold"/>
+
+                    <com.mudtusuario.custom.CustomEditText
+                        android:id="@+id/piso_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:hint="@string/piso_carga_hint"
+                        android:textColorHint="@color/secondary_text"
+                        android:background="@drawable/black_rec"
+                        android:padding="10dp"
+                        android:layout_marginTop="5dp"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="5dp">
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/elev_carga"
+                        android:textColor="@color/primary_text"
+                        android:textStyle="bold"/>
+
+                    <com.mudtusuario.custom.CustomTextView
+                        android:id="@+id/elev_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:hint="@string/elev_carga_hint"
+                        android:textColorHint="@color/secondary_text"
+                        android:background="@drawable/black_rec"
+                        android:padding="12dp"
+                        android:layout_marginTop="5dp"
+                        android:inputType="text"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.mudtusuario.custom.CustomButton
+                android:id="@+id/solic_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_icons"
+                android:text="@string/solic_btn"
+                android:background="@drawable/orange_btn"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="25dp"/>
 
         </LinearLayout>
 

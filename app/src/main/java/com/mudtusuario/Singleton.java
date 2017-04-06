@@ -66,7 +66,7 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
     private static Fragment fragment;
 
     private static ImageLoaderConfiguration config;
-    private static DisplayImageOptions defaultOptions;
+    private static DisplayImageOptions defaultOptions, defaultOptionsUnit;
     private static String baseUrl, image_url;
     private static LoadDialog load;
     private static TokenObj tokenObj;
@@ -77,6 +77,9 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
     private static ActiveObj isActive;
     private static int currentapiVersion;
     private static ImageView tool_logo;
+    public static final long dayLong = 86400000;
+    public static final long hourLong = 3600000;
+    public static final long minLong = 60000;
 
     //----------------------
     private static final int CORE_POOL_SIZE = 5;
@@ -114,6 +117,7 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
         image_url = getResources().getString(R.string.image_url);
         initPreferences();
         initImageLoader(this);
+        initImageLoaderUnit(this);
         genCacheDataCarpet();
         initGPSConfig(this);
     }
@@ -242,6 +246,71 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
 
     public static void loadImage(final String url, ImageView imageView, final ProgressBar load){
         ImageLoader.getInstance().displayImage(url, imageView, defaultOptions, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+                load.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                String message = null;
+                switch (failReason.getType()) {
+                    case IO_ERROR:
+                        message = "Error de entrada o de salida";
+                        break;
+                    case DECODING_ERROR:
+                        message = "La imagen no pudo ser decodificada";
+                        break;
+                    case NETWORK_DENIED:
+                        message = "La descarga fue denegada";
+                        break;
+                    case OUT_OF_MEMORY:
+                        message = "Out Of Memory error";
+                        break;
+                    case UNKNOWN:
+                        message = "Error desconocido";
+                        break;
+                }
+                Log.i(url, message);
+                load.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                load.setVisibility(android.view.View.GONE);
+            }
+        });
+    }
+
+    private static void initImageLoaderUnit(Context context) {
+        if(defaultOptionsUnit == null)
+            defaultOptionsUnit = new DisplayImageOptions.Builder()
+                    .showImageForEmptyUri(R.drawable.ic_mx2_on)
+                    .showImageOnFail(R.drawable.ic_mx2_on)
+                    .resetViewBeforeLoading(true)
+                    .cacheOnDisk(true)
+                    .bitmapConfig(Bitmap.Config.RGB_565)
+                    .considerExifParams(true)
+                    .displayer(new FadeInBitmapDisplayer(300))
+                    .build();
+
+
+        config = new ImageLoaderConfiguration.Builder(context)
+                .threadPriority(Thread.NORM_PRIORITY)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(150 * 1024 * 1024) // 150 Mb
+                .memoryCacheExtraOptions(480, 800)
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .writeDebugLogs()
+                .threadPoolSize(10)
+                .build();
+
+        ImageLoader.getInstance().init(config);
+    }
+
+    public static void loadUnitImage(final String url, ImageView imageView, final ProgressBar load){
+        ImageLoader.getInstance().displayImage(url, imageView, defaultOptionsUnit, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 load.setVisibility(View.VISIBLE);
