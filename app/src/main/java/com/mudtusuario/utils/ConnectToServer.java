@@ -92,7 +92,7 @@ public class ConnectToServer {
 
                 try {
                     Log.d("json send", json.toString());
-                    StringEntity se = new StringEntity(json.toString());
+                    StringEntity se = new StringEntity(json.toString(), HTTP.UTF_8);
 
                     httppost.setEntity(se);
                     httppost.setHeader("Accept", "application/json");
