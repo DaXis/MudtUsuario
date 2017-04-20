@@ -1,9 +1,13 @@
 package com.mudtusuario.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -39,6 +43,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,9 +60,11 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
     private Button req_btn;
     private boolean pointA, pointB;
     private LatLng pointIni, pointEnd;
-    private String ROUTE_MODE= "mode=driving";
+    private String ROUTE_MODE = "mode=driving";
     private MudUsObj mudObj;
     private Marker current;
+    private SupportMapFragment map;
+    private View rootView;
     //private String aux;
 
     @Override
@@ -73,7 +80,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         Singleton.setCurrentFragment(this);
 
@@ -86,32 +93,39 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.map_frag, container, false);
+        if(rootView == null) {
+            rootView = inflater.inflate(R.layout.map_frag, container, false);
+            Singleton.setMapView(rootView);
+        } else if(Singleton.getMapView() != null){
+            rootView = Singleton.getMapView();
+        }
 
         mudObj = new MudUsObj();
-        init_point_txt = (TextView)rootView.findViewById(R.id.init_point_txt);
-        end_point_txt = (TextView)rootView.findViewById(R.id.end_point_txt);
-        end_point = (LinearLayout)rootView.findViewById(R.id.end_point);
-        req_btn = (Button)rootView.findViewById(R.id.req_btn);
+        init_point_txt = (TextView) rootView.findViewById(R.id.init_point_txt);
+        end_point_txt = (TextView) rootView.findViewById(R.id.end_point_txt);
+        end_point = (LinearLayout) rootView.findViewById(R.id.end_point);
+        req_btn = (Button) rootView.findViewById(R.id.req_btn);
         req_btn.setOnClickListener(this);
-        info_map = (LinearLayout)rootView.findViewById(R.id.info_map);
+        info_map = (LinearLayout) rootView.findViewById(R.id.info_map);
 
-        SupportMapFragment map = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
-        map.getMapAsync(this);
+        if (map == null) {
+            map = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+            map.getMapAsync(this);
+        }
 
         return rootView;
     }
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.req_btn:
                 initMud();
                 break;
         }
     }
 
-    private void initMud(){
+    private void initMud() {
         Bundle bundle = new Bundle();
         bundle.putInt("lay", lay);
         bundle.putSerializable("mudObj", mudObj);
@@ -125,11 +139,26 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("googleMap","onMapReady");
+        Log.d("googleMap", "onMapReady");
         this.googleMap = googleMap;
-        LatLng latLng = new LatLng(Singleton.getLatitud(), Singleton.getLongitude());
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        //setInitPoint(latLng);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED)
+            return;
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new Handler().postDelayed(new Runnable(){
+                    public void run(){
+                        LatLng latLng = new LatLng(Singleton.getLatitud(), Singleton.getLongitude());
+                        MapFragment.this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                    };
+                }, 2500);
+            }
+        });
+
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override

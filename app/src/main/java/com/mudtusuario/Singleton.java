@@ -86,6 +86,8 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
     private static final int MAXIMUM_POOL_SIZE = 128;
     private static final int KEEP_ALIVE = 10;
 
+    private static View mapView;
+
     private static final BlockingQueue<Runnable> sWorkQueue =
             new LinkedBlockingQueue<Runnable>(KEEP_ALIVE);
 
@@ -497,6 +499,14 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
                 Toast.makeText(activity, "" + msn, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public static void setMapView(View arg){
+        mapView = arg;
+    }
+
+    public static View getMapView(){
+        return mapView;
     }
 
 }

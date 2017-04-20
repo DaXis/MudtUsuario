@@ -228,6 +228,7 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
                     unitObj.unit_id = unit.getInt("TipoUnidadId");
                     unitObj.unit_desc = unit.getString("TipoUnidadDescrip");
                     unitObj.unit_pic = unit.getString("TipoUnidadFoto");
+                    unitObj.SGTipoUnidadNomen = unit.getString("TipoUnidadNomenclatura");
                     unitObjs.add(unitObj);
                 }
             }
@@ -244,12 +245,13 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+            return new DatePickerDialog(getActivity(), R.style.DialogTheme, this, year, month, day);
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -333,16 +335,16 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
         day_mes_next.setText(getDateString(nextDay));
     }
 
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
+    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
 
-            return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+            return new TimePickerDialog(getActivity(), R.style.DialogTheme, this, hour, minute, DateFormat.is24HourFormat(getActivity()));
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -448,15 +450,16 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
             mudt.put("SGTipoUnidadId", unitObj.unit_id);
             mudObj.unitObj = unitObj;
 
-            mudt.put("MudanzaFechaAprox", "");
+            /*mudt.put("MudanzaFechaAprox", "");
             mudt.put("MudanzaHoraAprox", "");
-            mudt.put("MudanzaDistanciaAprox", "");
+            mudt.put("MudanzaDistanciaAprox", "");*/
             mudt.put("MudanzaDirCarLatLong", mudObj.carga_lat+","+mudObj.carga_lon);
             mudt.put("MudanzaDirDesLatLong", mudObj.des_lat+","+mudObj.des_lon);
 
             jsonObject.put("DatosMudanza", mudt);
 
-            Object[] objs = new Object[]{"RegistroMudanza", 15, this, jsonObject};
+            //Object[] objs = new Object[]{"RegistroMudanza", 15, this, jsonObject};
+            Object[] objs = new Object[]{"PreRegistroMudanza", 15, this, jsonObject};
             ConnectToServer connectToServer = new ConnectToServer(objs);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -468,12 +471,13 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
         Singleton.dissmissLoad();
         try {
             JSONObject jsonObject = new JSONObject(result);
-            if(jsonObject.getString("ReturnError").equals("200")){
-                mudObj.folio = jsonObject.getString("MudanzaFolioServicio");
-                mudObj.foraneo = jsonObject.getBoolean("IsForanea");
-                mudObj.mensaje = jsonObject.getString("Mensaje");
-                initMudDetail();
-            }
+            JSONObject preReg = jsonObject.getJSONObject("PreRegistro");
+            mudObj.MudanzaCosto = preReg.getString("MudanzaCosto");
+            mudObj.MudanzaDistanciaAproximada = preReg.getString("MudanzaDistanciaAproximada");
+            mudObj.MudanzaFechaAprox = preReg.getString("MudanzaFechaAprox");
+            mudObj.MudanzaFechaTentativaDescarga = preReg.getString("MudanzaFechaTentativaDescarga");
+            mudObj.MudanzaHoraTentativaDescarga = preReg.getString("MudanzaHoraTentativaDescarga");
+            initMudDetail();
         } catch (JSONException e) {
             e.printStackTrace();
         }

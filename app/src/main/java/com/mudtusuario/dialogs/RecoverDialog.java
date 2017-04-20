@@ -22,7 +22,6 @@ public class RecoverDialog extends DialogFragment implements View.OnClickListene
 
     public static RecoverDialog newInstance(){
         RecoverDialog recoverDialog = new RecoverDialog();
-
         return recoverDialog;
     }
 
@@ -31,7 +30,6 @@ public class RecoverDialog extends DialogFragment implements View.OnClickListene
         super.onCreate(saveInstanceState);
         int style = DialogFragment.STYLE_NORMAL;
         int theme = android.R.style.Theme_Holo;
-
         setStyle(style, theme);
     }
 

@@ -113,7 +113,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("MudanzaFolioServicio", mudObj.MudanzaFolioServicio);
-            Object[] objs = new Object[]{"GetMudanzaDetalle", 3, this, jsonObject};
+            Object[] objs = new Object[]{"GetMudanzaDetalleCliente", 3, this, jsonObject};
             ConnectToServer connectToServer = new ConnectToServer(objs);
         } catch (JSONException e) {
             e.printStackTrace();

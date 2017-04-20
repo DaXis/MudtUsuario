@@ -83,4 +83,7 @@
     <string name="elevator_have">¿Tiene elevador?</string>
     <string name="elev_carga_hint">¿Tiene elevador?</string>
     <string name="btn_confirm">CONFIRMAR SOLICITUD</string>
+    <string name="menu_pago">Pago</string>
+    <string name="his_act">Mudanzas actuales</string>
+    <string name="his_ant">Mudanzas anteriores</string>
 </resources>

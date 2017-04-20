@@ -10,4 +10,8 @@ public class MudUsObj implements Serializable {
     public int piso_carga, piso_des, elev_carga, elev_des;
     public boolean foraneo;
 
+    //********************** respuesta
+    public String MudanzaCosto, MudanzaDistanciaAproximada, MudanzaFechaAprox, MudanzaFechaTentativaDescarga,
+        MudanzaHoraTentativaDescarga;
+
 }

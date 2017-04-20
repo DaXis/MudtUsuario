@@ -27,6 +27,11 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/orange</item>
+        <item name="colorControlNormal">@color/orange</item>
+    </style>
+
     <style name="MyActionBar" parent="@style/Theme.AppCompat">
         <item name="background">@color/transparent</item>
     </style>

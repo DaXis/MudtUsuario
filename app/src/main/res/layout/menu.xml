@@ -174,7 +174,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/secondary_text"
-                android:text="@string/menu_guia"
+                android:text="@string/menu_pago"
                 android:layout_margin="10dp"/>
 
         </LinearLayout>

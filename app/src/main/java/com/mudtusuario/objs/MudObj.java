@@ -6,6 +6,5 @@ public class MudObj implements Serializable {
 
     public int MudanzaEstatusServicio;
     public String ClienteFoto, ClienteId, ClienteNombre, MudanzaDireccionCarga, MudanzaDireccionDescarga, MudanzaFechaSolicitud,
-            MudanzaFolioServicio, MudanzaHoraSolicitud, TipoUnidadDescrip, UnidadPlacas;
-
+            MudanzaFolioServicio, MudanzaHoraSolicitud, TipoUnidadDescrip, UnidadPlacas, UnidadFoto;
 }

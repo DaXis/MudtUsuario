@@ -68,8 +68,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_frag, container, false);
 
-        TextView title = (TextView)rootView.findViewById(R.id.title);
-        title.setText(this.title);
+        /*TextView title = (TextView)rootView.findViewById(R.id.title);
+        title.setText(this.title);*/
 
         mudts = (ListView)rootView.findViewById(R.id.mudts);
         adapter = new MudsAdapter(this, array);

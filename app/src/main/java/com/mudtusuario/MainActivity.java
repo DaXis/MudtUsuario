@@ -256,9 +256,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if(Singleton.getCurrentFragment().getClass() == ProcessFragment.class)
                     onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == HistorialFragment.class)
-                    initMainFragment();
+                    initMapFragment();
                 else if(Singleton.getCurrentFragment().getClass() == SolicitudFragment.class)
-                    initMainFragment();
+                    initMapFragment();
                 else if(Singleton.getCurrentFragment().getClass() == AboutFragment.class)
                     onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == InitMudFragment.class)
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.menu_mi_mud:
                 openCloseDrawer();
-                //initHistoryFragment();
+                initHistoryFragment();
             break;
             case R.id.menu_pago:
                 openCloseDrawer();

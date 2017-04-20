@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/text_icons">
 
-    <com.mudtusuario.custom.CustomTextView
+    <!--<com.mudtusuario.custom.CustomTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +14,34 @@
         android:layout_marginTop="15dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="20dp"/>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/btn_act"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orange_rect"
+            android:textColor="@color/text_icons"
+            android:layout_marginRight="5dp"
+            android:text="@string/his_act"/>
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/btn_ant"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:background="@drawable/white_rect"
+            android:textColor="@color/primary_color"
+            android:text="@string/his_ant"/>
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/mudts"
