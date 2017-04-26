@@ -445,14 +445,13 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
             mudObj.piso_des = Integer.parseInt(piso_desc.getText().toString());
 
             mudt.put("MudanzaDescripcionMobiliario", mudt_desc.getText().toString());
+            mudObj.desc = mudt_desc.getText().toString();
+
             mudt.put("ClienteId", Singleton.getUSerObj().GUID);
 
             mudt.put("SGTipoUnidadId", unitObj.unit_id);
             mudObj.unitObj = unitObj;
 
-            /*mudt.put("MudanzaFechaAprox", "");
-            mudt.put("MudanzaHoraAprox", "");
-            mudt.put("MudanzaDistanciaAprox", "");*/
             mudt.put("MudanzaDirCarLatLong", mudObj.carga_lat+","+mudObj.carga_lon);
             mudt.put("MudanzaDirDesLatLong", mudObj.des_lat+","+mudObj.des_lon);
 
@@ -470,6 +469,7 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
     public void getMudtResponse(String result) {
         Singleton.dissmissLoad();
         try {
+            mudObj.response = result;
             JSONObject jsonObject = new JSONObject(result);
             JSONObject preReg = jsonObject.getJSONObject("PreRegistro");
             mudObj.MudanzaCosto = preReg.getString("MudanzaCosto");

@@ -11,18 +11,21 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mudtusuario.R;
+import com.mudtusuario.Singleton;
 
 public class CustomDialog extends DialogFragment implements View.OnClickListener {
 
     private String title, body, action;
+    private int actionId;
 
-    public static CustomDialog newInstance(String title, String body, String action){
+    public static CustomDialog newInstance(String title, String body, String action, int actionId){
         CustomDialog custoDialog = new CustomDialog();
 
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
         bundle.putString("body", body);
         bundle.putString("action", action);
+        bundle.putInt("actionId", actionId);
         custoDialog.setArguments(bundle);
 
         return custoDialog;
@@ -37,6 +40,7 @@ public class CustomDialog extends DialogFragment implements View.OnClickListener
         title = getArguments().getString("title");
         body = getArguments().getString("body");
         action = getArguments().getString("action");
+        actionId = getArguments().getInt("actionId");
 
         setStyle(style, theme);
     }
@@ -65,7 +69,14 @@ public class CustomDialog extends DialogFragment implements View.OnClickListener
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.action:
-                dismiss();
+                switch(actionId){
+                    case 0:
+                        Singleton.dissmissCustom();
+                        break;
+                    case 1:
+                        Singleton.getMainActivity().initHistoryFragment();
+                        break;
+                }
                 break;
         }
     }

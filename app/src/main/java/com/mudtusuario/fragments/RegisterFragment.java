@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.mudtusuario.R;
 import com.mudtusuario.Singleton;
@@ -22,6 +23,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private int lay;
     private EditText name, app, apm, email, lada, movil, pass, user, pass_confirm;
     private Button regis_btn;
+    private ImageView pic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         regis_btn = (Button)rootView.findViewById(R.id.regis_btn);
         regis_btn.setOnClickListener(this);
 
+        pic = (ImageView)rootView.findViewById(R.id.pic);
+        pic.setOnClickListener(this);
+
         return rootView;
     }
 
@@ -70,6 +75,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             switch(view.getId()){
                 case R.id.regis_btn:
                     initConnection();
+                    break;
+                case R.id.pic:
+
                     break;
             }
         }

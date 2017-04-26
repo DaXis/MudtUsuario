@@ -23,6 +23,7 @@ import com.mudtusuario.fragments.InitMudFragment;
 import com.mudtusuario.fragments.LoginFragment;
 import com.mudtusuario.fragments.MainFragment;
 import com.mudtusuario.fragments.MapFragment;
+import com.mudtusuario.fragments.PagosFragment;
 import com.mudtusuario.fragments.ProcessFragment;
 import com.mudtusuario.fragments.RegisterFragment;
 import com.mudtusuario.fragments.SolicitudFragment;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView userName;
     private RegisterFragment registerFragment;
     private MapFragment mapFragment;
+    private PagosFragment pagosFragment;
 
     @Override
     protected void onResume(){
@@ -99,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Singleton.setDrawerLayout(drawerLayout);
 
         //cambiar a true si se pasa si login, false si se sigue el flujo normal
-        if(Singleton.getSettings().getBoolean("login_flag", false))
+        if(Singleton.getSettings().getBoolean("login_flag", false)) {
             initMapFragment();
-        else {
+        } else {
             if(getIntent().getBooleanExtra("arg", true))
                 initLoginFragment();
             else
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         aboutFragment = new AboutFragment();
         registerFragment = new RegisterFragment();
         mapFragment = new MapFragment();
+        pagosFragment = new PagosFragment();
     }
 
     private void removeFragments(){
@@ -156,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initMainFragment(){
         if(Singleton.getCurrentFragment() != mainFragment){
-            initUser();
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.left_drawer));
             removeFragments();
             Bundle bundle = new Bundle();
@@ -172,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initMapFragment(){
+        initUser();
         if(Singleton.getCurrentFragment() != mainFragment){
-            initUser();
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.left_drawer));
             removeFragments();
             Bundle bundle = new Bundle();
@@ -190,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initHistoryFragment(){
         if(Singleton.getCurrentFragment() != historialFragment){
-            initUser();
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.left_drawer));
             removeFragments();
             Bundle bundle = new Bundle();
@@ -207,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initAboutFragment(){
         if(Singleton.getCurrentFragment() != aboutFragment){
-            initUser();
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.left_drawer));
             removeFragments();
             Bundle bundle = new Bundle();
@@ -219,20 +219,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void initSolicitudFragment(){
-        if(Singleton.getCurrentFragment() != solicitudFragment){
-            initUser();
+    public void initPagosFragment(){
+        if(Singleton.getCurrentFragment() != pagosFragment){
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.left_drawer));
             removeFragments();
             Bundle bundle = new Bundle();
             bundle.putInt("lay", contenLay.getId());
-            bundle.putString("title", getResources().getString(R.string.sols_muds));
-            if(solicitudFragment.getArguments() == null)
-                solicitudFragment.setArguments(bundle);
-            else
-                solicitudFragment.getArguments().putString("title", getResources().getString(R.string.sols_muds));
+            if(pagosFragment.getArguments() == null)
+                pagosFragment.setArguments(bundle);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(contenLay.getId(), solicitudFragment).commit();
+            ft.add(contenLay.getId(), pagosFragment).commit();
         }
     }
 
@@ -263,6 +259,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == InitMudFragment.class)
                     onBackPressed();
+                else if(Singleton.getCurrentFragment().getClass() == PagosFragment.class)
+                    initMapFragment();
                 break;
             case R.id.menu_solis:
                 openCloseDrawer();
@@ -274,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
             case R.id.menu_pago:
                 openCloseDrawer();
-                //initSolicitudFragment();
+                initPagosFragment();
             break;
             case R.id.menu_guia_mud:
                 openCloseDrawer();
@@ -325,6 +323,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(Singleton.getCurrentFragment().getClass() == ViajeDetailFragment.class)
             super.onBackPressed();
         else if(Singleton.getCurrentFragment().getClass() == RegisterFragment.class)
+            initLoginFragment();
+        else if(Singleton.getCurrentFragment().getClass() == PagosFragment.class)
             initLoginFragment();
         else
             super.onBackPressed();

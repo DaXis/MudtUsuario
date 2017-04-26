@@ -36,13 +36,22 @@
                 android:layout_weight="0.1"
                 android:layout_height="wrap_content" />
 
-            <com.mudtusuario.custom.CustomTextView
+            <!--<com.mudtusuario.custom.CustomTextView
                 android:id="@+id/init_point_txt"
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
                 android:text="@string/init_point"
-                android:textColor="@color/divider_color"/>
+                android:textColor="@color/divider_color"/>-->
+            <com.mudtusuario.custom.CustomEditText
+                android:id="@+id/init_point_txt"
+                android:layout_width="0dp"
+                android:layout_weight="0.9"
+                android:layout_height="wrap_content"
+                android:hint="@string/init_point"
+                android:textColor="@color/divider_color"
+                android:drawableRight="@drawable/ic_search_api_holo_light"
+                android:drawableEnd="@drawable/ic_search_api_holo_light"/>
 
         </LinearLayout>
 
@@ -63,13 +72,22 @@
                 android:layout_weight="0.1"
                 android:layout_height="wrap_content" />
 
-            <com.mudtusuario.custom.CustomTextView
+            <!--<com.mudtusuario.custom.CustomTextView
                 android:id="@+id/end_point_txt"
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
                 android:text="@string/end_point"
-                android:textColor="@color/divider_color"/>
+                android:textColor="@color/divider_color"/>-->
+            <com.mudtusuario.custom.CustomEditText
+                android:id="@+id/end_point_txt"
+                android:layout_width="0dp"
+                android:layout_weight="0.9"
+                android:layout_height="wrap_content"
+                android:hint="@string/end_point"
+                android:textColor="@color/divider_color"
+                android:drawableRight="@drawable/ic_search_api_holo_light"
+                android:drawableEnd="@drawable/ic_search_api_holo_light"/>
 
         </LinearLayout>
 

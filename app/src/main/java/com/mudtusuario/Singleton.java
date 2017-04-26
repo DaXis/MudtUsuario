@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mudtusuario.dialogs.CustomDialog;
 import com.mudtusuario.dialogs.LoadDialog;
 import com.mudtusuario.objs.ActiveObj;
 import com.mudtusuario.objs.TokenObj;
@@ -80,6 +81,7 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
     public static final long dayLong = 86400000;
     public static final long hourLong = 3600000;
     public static final long minLong = 60000;
+    private static CustomDialog custoDialog;
 
     //----------------------
     private static final int CORE_POOL_SIZE = 5;
@@ -507,6 +509,38 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
 
     public static View getMapView(){
         return mapView;
+    }
+
+    public static CustomDialog showCustomDialog(FragmentManager manager, String title, String body, String action, int actionId){
+        if(custoDialog == null){
+            synchronized (Singleton.class){
+                if(custoDialog == null){
+                    custoDialog = CustomDialog.newInstance(title, body, action, actionId);
+                    custoDialog.setCancelable(false);
+                    try{
+                        custoDialog.show(manager, "custom dialog");
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return custoDialog;
+    }
+
+    public static void dissmissCustom(){
+        try {
+            if(custoDialog != null) {
+                try{
+                    custoDialog.dismiss();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                custoDialog = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

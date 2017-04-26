@@ -163,7 +163,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showCustomDialog(String title, String body, String action){
-        CustomDialog custoDialog = CustomDialog.newInstance(title, body, action);
+        CustomDialog custoDialog = CustomDialog.newInstance(title, body, action, 0);
         custoDialog.setCancelable(true);
         custoDialog.show(getFragmentManager(), "custom dialog");
     }

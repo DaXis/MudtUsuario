@@ -28,8 +28,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.mudtusuario.R;
 import com.mudtusuario.Singleton;
 import com.mudtusuario.objs.MudUsObj;
+import com.mudtusuario.utils.ConnectToServer;
 import com.mudtusuario.utils.DirectionsJSONParser;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -158,6 +160,7 @@ public class MudtDetailFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.initPros:
+                initAltaMudtConnect();
                 break;
         }
     }
@@ -455,5 +458,30 @@ public class MudtDetailFragment extends Fragment implements View.OnClickListener
         }
     }
     //**************************************************
+
+    private void initAltaMudtConnect(){
+        Singleton.showLoadDialog(getFragmentManager());
+        try {
+            JSONObject jsonObject = new JSONObject(mudObj.response);
+            Object[] objs = new Object[]{"RegistroMudanza", 17, this, jsonObject};
+            ConnectToServer connectToServer = new ConnectToServer(objs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Singleton.dissmissLoad();
+        }
+    }
+
+    public void getResponse(String result) {
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if(jsonObject.getString("ReturnError").contains("200")){
+                Singleton.showCustomDialog(getFragmentManager(),
+                        "Excelente", jsonObject.getString("Mensaje"), "Continuar", 1);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Singleton.dissmissLoad();
+    }
 
 }

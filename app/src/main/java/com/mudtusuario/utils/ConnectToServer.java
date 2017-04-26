@@ -5,12 +5,15 @@ import android.util.Log;
 
 import com.mudtusuario.Singleton;
 import com.mudtusuario.dialogs.FinishMudDialog;
+import com.mudtusuario.dialogs.PagoDialog;
 import com.mudtusuario.dialogs.RecoverDialog;
 import com.mudtusuario.fragments.HistorialFragment;
 import com.mudtusuario.fragments.InitMudFragment;
 import com.mudtusuario.fragments.LoginFragment;
 import com.mudtusuario.fragments.MainFragment;
 import com.mudtusuario.fragments.MapFragment;
+import com.mudtusuario.fragments.MudtDetailFragment;
+import com.mudtusuario.fragments.PagosFragment;
 import com.mudtusuario.fragments.ProcessFragment;
 import com.mudtusuario.fragments.RegisterFragment;
 import com.mudtusuario.fragments.SolicitudFragment;
@@ -338,6 +341,59 @@ public class ConnectToServer {
     }
     //++++++++++++++++++
 
+    //---------------------------
+    public ConnectToServer(Object[] args, double flag){
+        new ConnectLatLonAsync().executeOnExecutor(Singleton.getsExecutor(), args);
+    }
+
+    private class ConnectLatLonAsync extends AsyncTask<Object[], String, String> {
+
+        private Object[] aux;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            System.gc();
+        }
+
+        @Override
+        protected String doInBackground(Object[]... params) {
+            aux = params[0];
+            String sUrl = (String)aux[0], result = "";
+            sUrl = "http://maps.googleapis.com/maps/api/geocode/json?address="+sUrl+"&sensor=true_or_false";
+            //sUrl = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+sUrl+"&sensor=true";
+            //JSONObject json = (JSONObject)aux[3];
+            Log.d("ConnectToServer_URL --->", sUrl);
+
+            HttpClient httpclient = getNewHttpClient();
+
+            HttpPost httppost = new HttpPost(sUrl);
+
+            try {
+                org.apache.http.HttpResponse response = httpclient.execute(httppost);
+                result = getResponse(response);
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+            }
+
+            return result;
+        }
+
+        protected void onProgressUpdate(String... progress) {
+            Log.d("ANDRO_ASYNC", progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("ConnectToServer_onPostExecute "+aux[0], " "+result);
+            decideMethod((int)aux[1], aux[2], result);
+            System.gc();
+        }
+    }
+    //---------------------------
+
     private String getResponse(org.apache.http.HttpResponse response){
         StringBuilder sb = new StringBuilder();
         try {
@@ -451,6 +507,18 @@ public class ConnectToServer {
                 break;
             case 16:
                 ((MapFragment) o).getDirFromLtLn(result);
+                break;
+            case 17:
+                ((MudtDetailFragment) o).getResponse(result);
+                break;
+            case 18:
+                ((PagoDialog) o).getResponse(result);
+                break;
+            case 19:
+                ((PagosFragment) o).getResponse(result);
+                break;
+            case 20:
+                ((MapFragment) o).getLatLonResponse(result);
                 break;
         }
     }

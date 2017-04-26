@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.mudtusuario.R;
 import com.mudtusuario.Singleton;
+import com.mudtusuario.custom.CustomEditText;
+import com.mudtusuario.interfaces.DrawableClickListener;
 import com.mudtusuario.objs.MudObj;
 import com.mudtusuario.objs.MudUsObj;
 import com.mudtusuario.objs.UserObj;
@@ -55,17 +58,17 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
 
     private int lay;
     private GoogleMap googleMap;
-    private TextView init_point_txt, end_point_txt;
+    //private TextView init_point_txt, end_point_txt;
+    private CustomEditText init_point_txt, end_point_txt;
     private LinearLayout end_point, info_map;
     private Button req_btn;
     private boolean pointA, pointB;
     private LatLng pointIni, pointEnd;
-    private String ROUTE_MODE = "mode=driving";
+    private String ROUTE_MODE = "mode=driving", addres;
     private MudUsObj mudObj;
     private Marker current;
-    private SupportMapFragment map;
     private View rootView;
-    //private String aux;
+    private boolean point, from;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,17 +104,38 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         }
 
         mudObj = new MudUsObj();
-        init_point_txt = (TextView) rootView.findViewById(R.id.init_point_txt);
-        end_point_txt = (TextView) rootView.findViewById(R.id.end_point_txt);
+
+        /*init_point_txt = (TextView) rootView.findViewById(R.id.init_point_txt);
+        end_point_txt = (TextView) rootView.findViewById(R.id.end_point_txt);*/
+
+        init_point_txt = (CustomEditText) rootView.findViewById(R.id.init_point_txt);
+        init_point_txt.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                from = true;
+                point = true;
+                addres = init_point_txt.getText().toString();
+                initGetLatLon();
+            }
+        });
+        end_point_txt = (CustomEditText) rootView.findViewById(R.id.end_point_txt);
+        end_point_txt.setDrawableClickListener(new DrawableClickListener() {
+            @Override
+            public void onClick(DrawablePosition target) {
+                from = true;
+                point = false;
+                addres = end_point_txt.getText().toString();
+                initGetLatLon();
+            }
+        });
+
         end_point = (LinearLayout) rootView.findViewById(R.id.end_point);
         req_btn = (Button) rootView.findViewById(R.id.req_btn);
         req_btn.setOnClickListener(this);
         info_map = (LinearLayout) rootView.findViewById(R.id.info_map);
 
-        if (map == null) {
-            map = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-            map.getMapAsync(this);
-        }
+        SupportMapFragment map = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        map.getMapAsync(this);
 
         return rootView;
     }
@@ -155,7 +179,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                         LatLng latLng = new LatLng(Singleton.getLatitud(), Singleton.getLongitude());
                         MapFragment.this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                     };
-                }, 2500);
+                }, 3500);
             }
         });
 
@@ -257,6 +281,33 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         markerOptions.draggable(true);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_final));
         googleMap.addMarker(markerOptions);
+    }
+
+    private void initGetLatLon(){
+        Singleton.showLoadDialog(getFragmentManager());
+        addres = addres.replace(" ", "+");
+        Singleton.showLoadDialog(getFragmentManager());
+        Object[] objs = new Object[]{addres, 20, this};
+        ConnectToServer connectToServer = new ConnectToServer(objs, 0.0);
+    }
+
+    public void getLatLonResponse(String arg){
+        try {
+            JSONObject jsonObject = new JSONObject(arg);
+            JSONArray results = jsonObject.getJSONArray("results");
+            JSONObject dir = results.getJSONObject(0);
+            JSONObject geometry = dir.getJSONObject("geometry");
+            JSONObject location = geometry.getJSONObject("location");
+            LatLng latLng = new LatLng(location.getDouble("lat"), location.getDouble("lng"));
+            if(point){
+                setInitPoint(latLng);
+            } else {
+                setEndPoint(latLng);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Singleton.dissmissLoad();
     }
 
     private void initDirConnection(LatLng latLng){

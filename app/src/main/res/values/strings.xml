@@ -47,7 +47,7 @@
     <string name="splash_btn_reg">Regístrate</string>
     <string name="reg_title">Crear cuenta</string>
     <string name="reg_sub">Bienvenido a Mudanzas MX</string>
-    <string name="name_hint">Nombre</string>
+    <string name="name_hint">Nombre(s)</string>
     <string name="ap_hint">Apellido Paterno</string>
     <string name="email_hint">Correo eléctronico</string>
     <string name="lada_hint">Lada</string>
@@ -58,7 +58,7 @@
     <string name="footB">terminos y condiciones de uso</string>
     <string name="regis_title">Regístrate</string>
     <string name="apm_hint">Apellido Materno</string>
-    <string name="user_hint">Nombre de usuario</string>
+    <string name="user_hint">Usuario</string>
     <string name="menu_solis">Solicitar</string>
     <string name="menu_mi_mud">Mi mudanza</string>
     <string name="menu_guia_mud">Guía de mudanza</string>
@@ -86,4 +86,15 @@
     <string name="menu_pago">Pago</string>
     <string name="his_act">Mudanzas actuales</string>
     <string name="his_ant">Mudanzas anteriores</string>
+    <string name="pago_1">MÉTODOS DE PAGO</string>
+    <string name="pago_2">Sólo te falta agregar tu forma de pago</string>
+    <string name="pago_3">Ingresa una tarjeta para futuras mudanzas</string>
+    <string name="pago_btn">Agregar tarjeta de crédito o débito</string>
+    <string name="pago_dialog_1">Número de tarjeta</string>
+    <string name="pago_dialog_2">Fecha de vto.</string>
+    <string name="pago_dialog_3">CVV</string>
+    <string name="pago_dialog_4">País</string>
+    <string name="add">Agregar</string>
+    <string name="pago_dialog_5">Nombre del titular</string>
+    <string name="add_target">Agregar tarjeta</string>
 </resources>

@@ -265,7 +265,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
     }
 
     private void showCustomDialog(String title, String body, String action){
-        CustomDialog custoDialog = CustomDialog.newInstance(title, body, action);
+        CustomDialog custoDialog = CustomDialog.newInstance(title, body, action, 0);
         custoDialog.setCancelable(true);
         custoDialog.show(getFragmentManager(), "custom dialog");
     }
