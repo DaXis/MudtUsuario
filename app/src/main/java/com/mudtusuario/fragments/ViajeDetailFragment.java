@@ -95,7 +95,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         initPros = (Button)rootView.findViewById(R.id.initPros);
         initPros.setOnClickListener(this);
         if(title.contains("Solicitud")) {
-            initPros.setText(getResources().getString(R.string.acp_sol));
+            initPros.setText(getResources().getString(R.string.pagar));
             precioHint.setText(Singleton.getMainActivity().getResources().getText(R.string.aprox));
         } else
             precioHint.setText(Singleton.getMainActivity().getResources().getText(R.string.aprox));
@@ -125,10 +125,15 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
             JSONObject jsonObject = new JSONObject(result);
             JSONObject DetalleMudanza = jsonObject.getJSONObject("DetalleMudanza");
             detailObj = new DetailObj();
-            detailObj.ClienteFoto = DetalleMudanza.getString("ClienteFoto");
-            detailObj.ClienteId = DetalleMudanza.getString("ClienteId");
-            detailObj.ClienteNombre = DetalleMudanza.getString("ClienteNombre");
-            detailObj.ClienteTelefono = DetalleMudanza.getString("ClienteTelefono");
+            if(!DetalleMudanza.isNull("ClienteFoto"))
+                detailObj.ClienteFoto = DetalleMudanza.getString("ClienteFoto");
+            if(!DetalleMudanza.isNull("ClienteId"))
+                detailObj.ClienteId = DetalleMudanza.getString("ClienteId");
+            if(!DetalleMudanza.isNull("ClienteNombre"))
+                detailObj.ClienteNombre = DetalleMudanza.getString("ClienteNombre");
+            if(!DetalleMudanza.isNull("ClienteTelefono"))
+                detailObj.ClienteTelefono = DetalleMudanza.getString("ClienteTelefono");
+
             detailObj.MudanzaCosto = DetalleMudanza.getString("MudanzaCosto");
             detailObj.MudanzaDescripcionMobiliario = DetalleMudanza.getString("MudanzaDescripcionMobiliario");
             detailObj.MudanzaDireccionDescarga = DetalleMudanza.getString("MudanzaDireccionDescarga");
@@ -195,12 +200,12 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
             case R.id.initPros:
                 if(title.contains("Detalle")) {
                     if(mudObj.MudanzaEstatusServicio != 6) {
-                        if(CalculationByDistance() <= 100)
-                            initStatusConnection();
-                        else
+                        //if(CalculationByDistance() <= 100)
+                        //initPagoConnection();
+                        /*else
                             showCustomDialog("No puedes iniciar",
                                     "Debes estar por lo menos a 100 metros de distancia del punto de recogida para iniciar la mudanza",
-                                    "Continuar");
+                                    "Continuar");*/
                     } else
                         showCustomDialog("No puedes iniciar",
                                 "Valida que no tengas una mudanza iniciada o que la fecha no sea próxima",
@@ -213,7 +218,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
                     } else
                         showCustomDialog("Espera un momento", "Tienes una mudanza activa y no puedes comenzar otra", "Aceptar");*/
                 } else if(title.contains("Solicitud")){
-                    initAceptConnection();
+                    initPagoConnection();
                 }
                 break;
             case R.id.tel_lay:
@@ -222,46 +227,22 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private void initStatusConnection(){
+    private void initPagoConnection(){
         Singleton.showLoadDialog(getFragmentManager());
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("MudanzaFolioServicio", detailObj.MudanzaFolioServicio);
-            jsonObject.put("MudanzaEstatusServicio", 1);
-
-            //JSONObject jsonObject1 = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
-            JSONObject jsonObject0 = new JSONObject();
-            jsonObject0.put("LocalizacionLatitud", 19.434200286865);
-            jsonObject0.put("LocalizacionLongitud", -99.138603210449);
-            jsonArray.put(jsonObject0);
-            //jsonObject1.put("cGeolocations", jsonArray);
-
-            jsonObject.put("cGeolocations", jsonArray);
-            Object[] objs = new Object[]{"SetGeolocation", 10, this, jsonObject};
+            jsonObject.put("ClienteId", Singleton.getUSerObj().GUID);
+            jsonObject.put("FormatoPagoId", 1);
+            Object[] objs = new Object[]{"PagarMudanza", 10, this, jsonObject};
             ConnectToServer connectToServer = new ConnectToServer(objs);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void getStatusResponse(String result) {
+    public void getPagoResponse(String result) {
         Singleton.dissmissLoad();
-        initProcess();
-    }
-
-    public void initProcess(){
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("mudObj", mudObj);
-        bundle.putSerializable("detailObj", detailObj);
-        bundle.putInt("lay", lay);
-        ProcessFragment processFragment = new ProcessFragment();
-        processFragment.setArguments(bundle);
-        Singleton.setCurrentFragment(processFragment);
-        getFragmentManager().beginTransaction()
-                .replace(lay, processFragment)
-                .addToBackStack(null)
-                .commit();
     }
 
     private void showCustomDialog(String title, String body, String action){
@@ -276,7 +257,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         startActivity(intent);
     }
 
-    private void initAceptConnection(){
+    /*private void initAceptConnection(){
         Singleton.showLoadDialog(getFragmentManager());
         try {
             JSONObject jsonObject = new JSONObject();
@@ -292,7 +273,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
     public void getAceptResponse(String reponse){
         Singleton.dissmissLoad();
         getActivity().onBackPressed();
-    }
+    }*/
 
     public double CalculationByDistance() {
         int Radius=6371;//radius of earth in Km

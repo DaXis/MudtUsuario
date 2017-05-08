@@ -29,7 +29,7 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
     private ArrayList<MudObj> array = new ArrayList<>();
     private MudsAdapter adapter;
     private String title;
-    private Button btn_act, btn_ant;
+    //private Button btn_act, btn_ant;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,11 +62,11 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
         /*TextView title = (TextView)rootView.findViewById(R.id.title);
         title.setText(this.title);*/
 
-        btn_act = (Button)rootView.findViewById(R.id.btn_act);
+        /*btn_act = (Button)rootView.findViewById(R.id.btn_act);
         btn_act.setOnClickListener(this);
 
         btn_ant = (Button)rootView.findViewById(R.id.btn_ant);
-        btn_ant.setOnClickListener(this);
+        btn_ant.setOnClickListener(this);*/
 
         mudts = (ListView)rootView.findViewById(R.id.mudts);
         adapter = new MudsAdapter(this, array);
@@ -79,12 +79,12 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            case R.id.btn_act:
-                btnsBg(0);
+            /*case R.id.btn_act:
+                //btnsBg(0);
                 break;
             case R.id.btn_ant:
-                btnsBg(1);
-                break;
+                //btnsBg(1);
+                break;*/
         }
     }
 
@@ -144,7 +144,7 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
                 .commit();
     }
 
-    private void btnsBg(int arg){
+    /*private void btnsBg(int arg){
         switch(arg){
             case 0:
                 btn_act.setBackgroundResource(R.drawable.orange_rect);
@@ -167,6 +167,6 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
                 initConnection();
                 break;
         }
-    }
+    }*/
 
 }

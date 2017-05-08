@@ -488,13 +488,13 @@ public class ConnectToServer {
                 ((RecoverDialog) o).getRecoverResponse(result);
                 break;
             case 10:
-                ((ViajeDetailFragment) o).getStatusResponse(result);
+                ((ViajeDetailFragment) o).getPagoResponse(result);
                 break;
             case 11:
                 ((ProcessFragment) o).getEndResponse(result);
                 break;
             case 12:
-                ((ViajeDetailFragment) o).getAceptResponse(result);
+                //((ViajeDetailFragment) o).getAceptResponse(result);
                 break;
             case 13:
                 ((RegisterFragment) o).getResponse(result);

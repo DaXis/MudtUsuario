@@ -94,7 +94,7 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         Singleton.setCurrentFragment(this);
 
         Singleton.getActionButon().setVisibility(View.INVISIBLE);
-        Singleton.getActionText().setText("Empezar Viaje");
+        Singleton.getActionText().setText("Proceso del viaje");
         Singleton.getMenuBtn().setImageResource(R.drawable.ic_back);
         Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, getActivity().findViewById(R.id.left_drawer));
     }
@@ -158,40 +158,23 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.endMud:
-                if(process == 4)
-                    flag = true;
-                initTakePic(1, mudObj.MudanzaFolioServicio+"_3");
+
                 break;
             case R.id.second_step:
-                if(process == 1) {
-                    currentTV = hour_b;
-                    initConnection(2);
-                }
+
                 break;
             case R.id.trhid_step:
-                if(process == 2) {
-                    currentTV = hour_c;
-                    initConnection(3);
-                }
+
                 break;
             case R.id.fourth_step:
-                if(process == 3) {
-                    currentTV = hour_d;
-                    initConnection(4);
-                }
+
                 break;
             case R.id.tel_lay:
-                callIntent(detailObj.ClienteTelefono);
+                //callIntent(detailObj.ClienteTelefono);
                 break;
             case R.id.pic1:
-                //callIntent(detailObj.ClienteTelefono);
-                flag = false;
-                initTakePic(1, mudObj.MudanzaFolioServicio+"_1");
                 break;
             case R.id.pic2:
-                //callIntent(detailObj.ClienteTelefono);
-                flag = false;
-                initTakePic(1, mudObj.MudanzaFolioServicio+"_2");
                 break;
         }
     }
@@ -229,193 +212,6 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         onUIThread(currentTV, System.currentTimeMillis());
         Singleton.dissmissLoad();
         process++;
-    }
-
-    private void sendPic(){
-        Singleton.showLoadDialog(getFragmentManager());
-        Object[] objs = new Object[]{"", 7, this, file};
-        ConnectToServer connectToServer = new ConnectToServer(objs, 0);
-    }
-
-    public void getPicResponse(String result){
-        try {
-            JSONObject object = new JSONObject(result);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("MudanzaFolioServicio", detailObj.MudanzaFolioServicio);
-            jsonObject.put("MudanzaEvidenciaDescarga", object.getString("object_id"));
-            Object[] objs = new Object[]{"SetFinMudanza", 11, this, jsonObject};
-            ConnectToServer connectToServer = new ConnectToServer(objs);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getEndResponse(String response){
-        //{"Mensaje":"Guardo sin P...","ReturnError":"200"}
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            if(jsonObject.getString("ReturnError").equals("200")){
-                Singleton.dissmissLoad();
-                showEndDialog();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void initTakePic(int actionCode, String name) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        switch(actionCode) {
-            case ACTION_TAKE_PHOTO:
-                File f = null;
-                try {
-                    f = setUpPhotoFile(name);
-                    img_path = f.getAbsolutePath();
-                    if(Singleton.getCurrentApiVersion() < Build.VERSION_CODES.N)
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    else {
-                        Uri photoURI = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName() +
-                                ".provider", f);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    f = null;
-                    img_path = null;
-                }
-                break;
-            default:
-                break;
-        }
-
-        startActivityForResult(takePictureIntent, actionCode);
-    }
-
-    private File setUpPhotoFile(String name) throws IOException {
-        File f = createImageFile(name);
-        //mCurrentPhotoPath = f.getAbsolutePath();
-        return f;
-    }
-
-    private File createImageFile(String name) throws IOException {
-        String imageFileName = "foto-" + name;
-        //String imageFileName = demoId+"-" + id;
-
-        File storageDir = Singleton.getCacheCarpet();
-        File image = new File(storageDir, imageFileName+".jpg");
-
-        //mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case ACTION_TAKE_PHOTO:
-                if (resultCode == getActivity().RESULT_OK) {
-                    file = new File(img_path);
-                    setPic();
-                }
-                break;
-            case ACTION_GET_CONTENT:
-                onSelectFromGalleryResult(data);
-                break;
-        }
-    }
-
-    private void setPic() {
-        int targetW = 150;
-        int targetH = 150;
-
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(img_path, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-        int scaleFactor = Math.min (photoW/targetW, photoH/targetH);
-
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        //bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(img_path, bmOptions);
-
-        if(flag)
-            sendPic();
-        //current.setImageBitmap(bitmap);
-
-        /*targetW = 600;
-        targetH = 800;
-        bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(img_path, bmOptions);
-        photoW = bmOptions.outWidth;
-        photoH = bmOptions.outHeight;
-        scaleFactor = Math.min (photoW/targetW, photoH/targetH);
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        //bmOptions.inPurgeable = true;
-
-        bitmap = BitmapFactory.decodeFile(img_path, bmOptions);*/
-    }
-
-    private void onSelectFromGalleryResult(Intent data) {
-        Bitmap bm = null;
-        if (data != null) {
-            try {
-                bm = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), data.getData());
-
-                Uri tempUri = getImageUri(getContext(), bm);
-                file = new File(getRealPathFromURI(tempUri));
-
-                int targetW = 600;
-                int targetH = 800;
-                float ratio = Math.min(
-                        (float) targetW / bm.getWidth(),
-                        (float) targetH / bm.getHeight());
-                int width = Math.round((float) ratio * bm.getWidth());
-                int height = Math.round((float) ratio * bm.getHeight());
-
-                Bitmap newBitmap = Bitmap.createScaledBitmap(bm, width, height, true);
-
-                current.setImageBitmap(newBitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-    public String getRealPathFromURI(Uri uri) {
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
-    }
-
-    public void galleryIntent(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, ACTION_GET_CONTENT);
-    }
-
-    private void showPicDialog(int id){
-        PicDialog picDialog = PicDialog.newInstance(this, id);
-        picDialog.setCancelable(true);
-        picDialog.show(getFragmentManager(), "pic dialog");
-    }
-
-    private void callIntent(String tel){
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + tel));
-        startActivity(intent);
     }
 
     private void solbedIssue(View view){
@@ -489,19 +285,6 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         });
     }
 
-    /*private Date getDateFromString(String fecha){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date date = null;
-        try {
-            date = format.parse(fecha);
-            //System.out.println(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }*/
-
     public static String getDateString(long time){
         String date = "";
         //SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm aa");
@@ -511,21 +294,5 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         //date = new SimpleDateFormat("dd 'de' MMMM',' hh:mm a").format(new Date(time));
         return date;
     }
-
-    /*private void centerMapBetweenAlotoffPoints(){
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(srcP);
-        for (int i = 0; i < points.size(); i++) {
-            builder.include(points.get(i).getPosition());
-        }
-
-        LatLngBounds bounds = builder.build();
-
-        int padding = 80;
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-
-        map.moveCamera(cu);
-        map.animateCamera(cu);
-    }*/
 
 }

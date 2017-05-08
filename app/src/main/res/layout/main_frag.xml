@@ -5,18 +5,18 @@
     android:layout_height="match_parent"
     android:background="@color/text_icons">
 
-    <!--<com.mudtusuario.custom.CustomTextView
+    <com.mudtusuario.custom.CustomTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next_mudt"
+        android:text="@string/pross_mud"
         android:textColor="@color/primary_text"
         android:layout_marginTop="15dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>-->
+        android:layout_marginRight="20dp"/>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -41,7 +41,7 @@
             android:textColor="@color/primary_color"
             android:text="@string/his_ant"/>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
     <ListView
         android:id="@+id/mudts"

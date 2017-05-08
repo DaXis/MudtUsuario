@@ -396,12 +396,24 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
                             if(mudt_desc.getText().length() != 0){
                                 if(unitObj != null){
                                     initAltaMudtConnect();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                                } else
+                                    Singleton.showCustomDialog(getFragmentManager(),
+                                            "¡Atención!", "Debes seleccionar el tipo de unidad que requieres", "Continuar", 0);
+                            } else
+                                Singleton.showCustomDialog(getFragmentManager(),
+                                        "¡Atención!", "Debes proporcionarnos una descripción del inmueble", "Continuar", 0);
+                        } else
+                            Singleton.showCustomDialog(getFragmentManager(),
+                                    "¡Atención!", "Debes indicarnos si se tiene elevador de descarga", "Continuar", 0);
+                    } else
+                        Singleton.showCustomDialog(getFragmentManager(),
+                                "¡Atención!", "Debes proporcionar el piso de descarga", "Continuar", 0);
+                } else
+                    Singleton.showCustomDialog(getFragmentManager(),
+                            "¡Atención!", "Debes indicarnos si se tiene elevador de carga", "Continuar", 0);
+            } else
+                Singleton.showCustomDialog(getFragmentManager(),
+                        "¡Atención!", "Debes proporcionar el piso de carga", "Continuar", 0);
         }
 
         return false;

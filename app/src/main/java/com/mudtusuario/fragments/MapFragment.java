@@ -135,7 +135,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         info_map = (LinearLayout) rootView.findViewById(R.id.info_map);
 
         SupportMapFragment map = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        map.getMapAsync(this);
+        if(map != null)
+            map.getMapAsync(this);
 
         return rootView;
     }
