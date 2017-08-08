@@ -479,7 +479,7 @@ public class ConnectToServer {
                 ((ProcessFragment) o).getResponse(result);
                 break;
             case 7:
-                ((ProcessFragment) o).getPicResponse(result);
+                //((ProcessFragment) o).getPicResponse(result);
                 break;
             case 8:
                 ((FinishMudDialog) o).getResponse(result);
@@ -488,10 +488,10 @@ public class ConnectToServer {
                 ((RecoverDialog) o).getRecoverResponse(result);
                 break;
             case 10:
-                ((ViajeDetailFragment) o).getPagoResponse(result);
+                //((ViajeDetailFragment) o).getPagoResponse(result);
                 break;
             case 11:
-                ((ProcessFragment) o).getEndResponse(result);
+                //((ProcessFragment) o).getEndResponse(result);
                 break;
             case 12:
                 //((ViajeDetailFragment) o).getAceptResponse(result);

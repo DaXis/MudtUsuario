@@ -51,7 +51,7 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
 
         Singleton.getActionButon().setVisibility(View.INVISIBLE);
         Singleton.getActionText().setText("");
-        //Singleton.getMenuBtn().setImageResource(R.drawable.ic_back);
+        Singleton.getMenuBtn().setImageResource(R.drawable.ic_back);
         Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, getActivity().findViewById(R.id.left_drawer));
     }
 

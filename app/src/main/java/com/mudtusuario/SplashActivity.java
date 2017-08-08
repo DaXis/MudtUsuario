@@ -40,6 +40,8 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         if (currentapiVersion >= Build.VERSION_CODES.M)
             checkGPSPermission();
+        else
+            onUIThread();
     }
 
 

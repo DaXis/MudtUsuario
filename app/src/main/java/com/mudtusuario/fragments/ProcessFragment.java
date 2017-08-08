@@ -66,10 +66,6 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     private TextView user_name, tel, ubic_a, ubic_b, hour_a, hour_b, hour_c, hour_d, hour_e, currentTV;
     private Button endMud;
     private LinearLayout init_process, second_step, trhid_step, fourth_step, fifth_step, tel_lay;
-    private static final int ACTION_TAKE_PHOTO = 1, ACTION_GET_CONTENT = 2;
-    private String img_path;
-    private File file;
-    private boolean flag;
     private ScrollView mainScrollView;
     private SupportMapFragment map;
     private GoogleMap googleMap;

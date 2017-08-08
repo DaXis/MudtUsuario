@@ -57,11 +57,11 @@ public class PicDialog extends DialogFragment implements View.OnClickListener {
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.camera:
-                fragment.initTakePic(1, "1");
+                //fragment.initTakePic(1, "1");
                 dismiss();
                 break;
             case R.id.gallery:
-                fragment.galleryIntent();
+                //fragment.galleryIntent();
                 dismiss();
                 break;
         }

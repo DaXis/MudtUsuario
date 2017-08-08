@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView userPic;
     private TextView userName;
     private RegisterFragment registerFragment;
-    private MapFragment mapFragment;
+    //private MapFragment mapFragment;
     private PagosFragment pagosFragment;
 
     @Override
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         solicitudFragment = new SolicitudFragment();
         aboutFragment = new AboutFragment();
         registerFragment = new RegisterFragment();
-        mapFragment = new MapFragment();
+        //mapFragment = new MapFragment();
         pagosFragment = new PagosFragment();
     }
 
@@ -175,19 +175,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initMapFragment(){
         initUser();
-        if(Singleton.getCurrentFragment() != mainFragment){
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.left_drawer));
-            removeFragments();
-            Bundle bundle = new Bundle();
-            bundle.putInt("lay", contenLay.getId());
-            bundle.putString("title", getResources().getString(R.string.next_mudt));
-            if(mapFragment.getArguments() == null)
-                mapFragment.setArguments(bundle);
-            else
-                mapFragment.getArguments().putString("title", getResources().getString(R.string.next_mudt));
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(contenLay.getId(), mapFragment).commit();
+        if(Singleton.getCurrentFragment() == null)
+            gotoMap();
+        else if(Singleton.getCurrentFragment().getClass() != MapFragment.class){
+            gotoMap();
         }
+    }
+
+    private void gotoMap(){
+        MapFragment mapFragment = new MapFragment();
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, findViewById(R.id.left_drawer));
+        removeFragments();
+        Bundle bundle = new Bundle();
+        bundle.putInt("lay", contenLay.getId());
+        bundle.putString("title", getResources().getString(R.string.next_mudt));
+        if(mapFragment.getArguments() == null)
+            mapFragment.setArguments(bundle);
+        else
+            mapFragment.getArguments().putString("title", getResources().getString(R.string.next_mudt));
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(contenLay.getId(), mapFragment).commit();
     }
 
     public void initHistoryFragment(){
@@ -252,15 +259,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if(Singleton.getCurrentFragment().getClass() == ProcessFragment.class)
                     onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == HistorialFragment.class)
-                    initMapFragment();
+                    onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == SolicitudFragment.class)
-                    initMapFragment();
+                    onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == AboutFragment.class)
                     onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == InitMudFragment.class)
                     onBackPressed();
                 else if(Singleton.getCurrentFragment().getClass() == PagosFragment.class)
-                    initMapFragment();
+                    onBackPressed();
                 break;
             case R.id.menu_solis:
                 openCloseDrawer();
@@ -325,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(Singleton.getCurrentFragment().getClass() == RegisterFragment.class)
             initLoginFragment();
         else if(Singleton.getCurrentFragment().getClass() == PagosFragment.class)
-            initLoginFragment();
+            initMapFragment();
         else
             super.onBackPressed();
     }

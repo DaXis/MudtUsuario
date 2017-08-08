@@ -91,7 +91,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         Singleton.getActionText().setVisibility(View.GONE);
         Singleton.getToolLogo().setVisibility(View.VISIBLE);
         Singleton.getMenuBtn().setImageResource(R.drawable.ic_menu);
-        Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, getActivity().findViewById(R.id.left_drawer));
+        Singleton.getMenuBtn().setVisibility(View.VISIBLE);
+        Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
+                getActivity().findViewById(R.id.left_drawer));
     }
 
     @Override
@@ -115,6 +117,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                 from = true;
                 point = true;
                 addres = init_point_txt.getText().toString();
+                pointA = false;
+                pointB = false;
                 initGetLatLon();
             }
         });
@@ -125,6 +129,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                 from = true;
                 point = false;
                 addres = end_point_txt.getText().toString();
+                pointA = true;
+                pointB = false;
                 initGetLatLon();
             }
         });
@@ -300,8 +306,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
             JSONObject geometry = dir.getJSONObject("geometry");
             JSONObject location = geometry.getJSONObject("location");
             LatLng latLng = new LatLng(location.getDouble("lat"), location.getDouble("lng"));
-            if(point){
+            if(point && !pointA){
                 setInitPoint(latLng);
+                pointA = true;
             } else {
                 setEndPoint(latLng);
             }
