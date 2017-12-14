@@ -37,4 +37,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.google.android.gms:play-services-maps:10.2.6'
     compile 'com.paypal.sdk:paypal-android-sdk:2.15.3'
+    //compile 'com.braintreepayments.api:braintree:2.7.3'
 }

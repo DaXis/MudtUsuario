@@ -23,7 +23,32 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/desing_lay"
+                android:visibility="gone">
+
+                <com.mudtusuario.custom.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desing"
+                    android:textColor="@color/primary_color"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

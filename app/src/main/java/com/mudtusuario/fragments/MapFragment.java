@@ -25,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -119,6 +120,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                 addres = init_point_txt.getText().toString();
                 pointA = false;
                 pointB = false;
+                Singleton.hideKeyboard(MapFragment.this.getView());
                 initGetLatLon();
             }
         });
@@ -131,6 +133,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                 addres = end_point_txt.getText().toString();
                 pointA = true;
                 pointB = false;
+                Singleton.hideKeyboard(MapFragment.this.getView());
                 initGetLatLon();
             }
         });
@@ -216,41 +219,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
             public void onInfoWindowClick(Marker marker) {
                 current = marker;
                 initDirConnection(marker.getPosition());
-                /*if(marker.getTitle().contains("Usar esta como ubicación inicial")){
-                    //String aux = getDirFromLtLn(marker.getPosition());
-                    if(aux.contains("Error")) {
-                        init_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
-                        init_point_txt.setText(aux);
-                        end_point.setVisibility(View.GONE);
-                    } else {
-                        init_point_txt.setTextColor(getResources().getColor(R.color.primary_text));
-                        init_point_txt.setText(aux);
-                        end_point.setVisibility(View.VISIBLE);
-                        pointIni = marker.getPosition();
-                        mudObj.carga_dir = aux;
-                        mudObj.carga_lat = marker.getPosition().latitude;
-                        mudObj.carga_lon = marker.getPosition().longitude;
-                    }
-                } else {
-                    //String aux = getDirFromLtLn(marker.getPosition());
-                    if(aux.contains("Error")) {
-                        end_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
-                        end_point_txt.setText(aux);
-                        req_btn.setVisibility(View.GONE);
-                    } else {
-                        end_point_txt.setTextColor(getResources().getColor(R.color.primary_text));
-                        end_point_txt.setText(aux);
-                        req_btn.setVisibility(View.VISIBLE);
-                        pointEnd = marker.getPosition();
-                        ArrayList<LatLng> aux0 = new ArrayList<LatLng>();
-                        aux0.add(pointEnd);
-                        drawLocationsRoutes(pointIni, aux0);
-                        info_map.setVisibility(View.VISIBLE);
-                        mudObj.des_dir = aux;
-                        mudObj.des_lat = marker.getPosition().latitude;
-                        mudObj.des_lon = marker.getPosition().longitude;
-                    }
-                }*/
             }
         });
 
@@ -259,12 +227,12 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
             public void onMapLongClick(LatLng latLng) {
                 if(end_point.getVisibility() == View.GONE) {
                     if (!pointA) {
-                        setInitPoint(latLng);
+                        setInitPoint(latLng, false);
                         pointA = true;
                     }
                 } else {
                     if (!pointB) {
-                        setEndPoint(latLng);
+                        setEndPoint(latLng, false);
                         pointB = true;
                     }
                 }
@@ -272,22 +240,37 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         });
     }
 
-    private void setInitPoint(LatLng latLng){
+    private void setInitPoint(LatLng latLng, boolean flag){
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Usar esta como ubicación inicial");
         markerOptions.draggable(true);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_inicio));
         googleMap.addMarker(markerOptions);
+
+
+        if(flag) {
+            LatLngBounds latLngBounds = new LatLngBounds(latLng,latLng);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 10));
+            current = googleMap.addMarker(markerOptions);
+        } else
+            googleMap.addMarker(markerOptions);
     }
 
-    private void setEndPoint(LatLng latLng){
+    private void setEndPoint(LatLng latLng, boolean flag){
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Punto de descarga");
         markerOptions.draggable(true);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_final));
         googleMap.addMarker(markerOptions);
+
+        if(flag) {
+            LatLngBounds latLngBounds = new LatLngBounds(latLng,latLng);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 10));
+            current = googleMap.addMarker(markerOptions);
+        } else
+            googleMap.addMarker(markerOptions);
     }
 
     private void initGetLatLon(){
@@ -305,12 +288,49 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
             JSONObject dir = results.getJSONObject(0);
             JSONObject geometry = dir.getJSONObject("geometry");
             JSONObject location = geometry.getJSONObject("location");
+            String aux = dir.getString("formatted_address");
             LatLng latLng = new LatLng(location.getDouble("lat"), location.getDouble("lng"));
             if(point && !pointA){
-                setInitPoint(latLng);
+                //init_point_txt.setText(dir.getString("formatted_address"));
+                setInitPoint(latLng, true);
+
+                if(aux.contains("Error")) {
+                    init_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
+                    init_point_txt.setText(aux);
+                    end_point.setVisibility(View.GONE);
+                } else {
+                    init_point_txt.setTextColor(getResources().getColor(R.color.primary_text));
+                    init_point_txt.setText(aux);
+                    end_point.setVisibility(View.VISIBLE);
+                    pointIni = current.getPosition();
+                    mudObj.carga_dir = aux;
+                    mudObj.carga_lat = current.getPosition().latitude;
+                    mudObj.carga_lon = current.getPosition().longitude;
+                }
+
                 pointA = true;
             } else {
-                setEndPoint(latLng);
+                //end_point_txt.setText(dir.getString("formatted_address"));
+                setEndPoint(latLng, true);
+
+                if(aux.contains("Error")) {
+                    end_point_txt.setTextColor(getResources().getColor(R.color.divider_color));
+                    end_point_txt.setText(aux);
+                    req_btn.setVisibility(View.GONE);
+                } else {
+                    end_point_txt.setTextColor(getResources().getColor(R.color.primary_text));
+                    end_point_txt.setText(aux);
+                    req_btn.setVisibility(View.VISIBLE);
+                    pointEnd = current.getPosition();
+                    ArrayList<LatLng> aux0 = new ArrayList<LatLng>();
+                    aux0.add(pointEnd);
+                    drawLocationsRoutes(pointIni, aux0);
+                    info_map.setVisibility(View.VISIBLE);
+                    mudObj.des_dir = aux;
+                    mudObj.des_lat = current.getPosition().latitude;
+                    mudObj.des_lon = current.getPosition().longitude;
+                }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -372,41 +392,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                 mudObj.des_lon = current.getPosition().longitude;
             }
         }
-        /*try {
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(getActivity(), Locale.getDefault());
-        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        String city = addresses.get(0).getLocality();
-        String state = addresses.get(0).getAdminArea();
-        String country = addresses.get(0).getCountryName();
-        String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName();
-        return address+", "+city;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error";
-        }*/
-
-        /*try {
-            Geocoder geo = new Geocoder(getActivity(), Locale.getDefault());
-            List<Address> addresses = geo.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if (addresses.isEmpty()) {
-                return "Esperando la dirección";
-            }
-            else {
-                if (addresses.size() > 0) {
-                    return addresses.get(0).getFeatureName() + ", " + addresses.get(0).getLocality() +", " +
-                            addresses.get(0).getAdminArea() + ", " + addresses.get(0).getCountryName();
-                } else
-                    return "Algo";
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return "Algo";
-        }*/
     }
 
     //**************************************************
