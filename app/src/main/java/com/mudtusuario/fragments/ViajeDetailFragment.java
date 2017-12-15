@@ -238,7 +238,11 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         if(root.equals("com.mudtusuario.fragments.HistorialFragment")){
             if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6)
                 initPros.setText(getResources().getString(R.string.pagar));
+            else if(detailObj.MudanzaEstatus == 0)
+                initPros.setText(getResources().getString(R.string.pendiente));
             else if(detailObj.MudanzaEstatus == 1)
+                initPros.setText(getResources().getString(R.string.pagar));
+            else if(detailObj.MudanzaEstatus == 2)
                 initPros.setText(getResources().getString(R.string.curso));
             else if(detailObj.MudanzaEstatus == 3)
                 initPros.setText(getResources().getString(R.string.cancelado));
@@ -273,7 +277,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
                                 "Valida que no tengas una mudanza iniciada o que la fecha no sea próxima",
                                 "Continuar");
                 } else if(title.contains("Solicitud")){
-                    if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6)
+                    if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6 || detailObj.MudanzaEstatus == 1)
                         paypalIntent();
                 }
                 break;

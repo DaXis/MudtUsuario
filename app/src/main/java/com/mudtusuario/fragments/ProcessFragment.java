@@ -67,7 +67,7 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     private Button endMud;
     private LinearLayout init_process, second_step, trhid_step, fourth_step, fifth_step, tel_lay;
     private ScrollView mainScrollView;
-    private SupportMapFragment map;
+    //private SupportMapFragment map;
     private GoogleMap googleMap;
 
     @Override

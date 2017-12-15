@@ -104,4 +104,6 @@
     <string name="cancelado">CANCELADO</string>
     <string name="concluido">CONCLUIDA</string>
     <string name="pagada">PAGADA</string>
+    <string name="pendiente">PENDIENTE POR ACEPTAR</string>
+    <string name="operador">OPERADOR CONFIRMADO</string>
 </resources>
