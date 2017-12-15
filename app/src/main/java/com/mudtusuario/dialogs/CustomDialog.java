@@ -77,6 +77,10 @@ public class CustomDialog extends DialogFragment implements View.OnClickListener
                         Singleton.getMainActivity().initHistoryFragment();
                         Singleton.dissmissCustom();
                         break;
+                    case 2:
+                        Singleton.dissmissCustom();
+                        Singleton.getMainActivity().onBackPressed();
+                        break;
                 }
                 break;
         }

@@ -139,6 +139,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         bundle.putSerializable("mudObj", mudObj);
         bundle.putInt("lay", lay);
         bundle.putString("title", "Detalle de viaje");
+        bundle.putString("root", MainFragment.class.getName());
         ViajeDetailFragment newItemFragment = new ViajeDetailFragment();
         newItemFragment.setArguments(bundle);
         Singleton.setCurrentFragment(newItemFragment);

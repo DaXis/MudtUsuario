@@ -26,10 +26,14 @@ import com.mudtusuario.dialogs.CustomDialog;
 import com.mudtusuario.objs.DetailObj;
 import com.mudtusuario.objs.MudObj;
 import com.mudtusuario.utils.ConnectToServer;
+import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalFuturePaymentActivity;
 import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalProfileSharingActivity;
 import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,13 +54,14 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
             dist, piso_b, have_b, precio, precioHint;
     private Button initPros;
     private DetailObj detailObj;
-    private String title;
+    private String title, root;
     private LinearLayout telLay, user_lay, desing_lay;
 
     //******************************
     private static final String TAG = "paymentExample";
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
-    private static final String CONFIG_CLIENT_ID = "AY3Btp31GxUmhMyBUdhsqlfbWiaosu6f1WgWRHtCnc_H4ssMpad0IAhk-_3iYQwig5QkUQhamD9FtFD0";
+    private static final String CONFIG_CLIENT_ID = "AY3Btp31GxUmhMyBUdhsqlfbWiaosu6f1WgWRHtCnc_H4ssMpad0IAhk-" +
+            "_3iYQwig5QkUQhamD9FtFD0";
     private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final int REQUEST_CODE_PROFILE_SHARING = 3;
@@ -75,6 +80,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         lay = bundle.getInt("lay");
         mudObj = (MudObj)bundle.getSerializable("mudObj");
         title = bundle.getString("title");
+        root = bundle.getString("root");
     }
 
     @Override
@@ -193,6 +199,8 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
             detailObj.MudanzaDistanciaAproximada = DetalleMudanza.getString("MudanzaDistanciaAproximada");
             detailObj.MudanzaDirCarLatLong = DetalleMudanza.getString("MudanzaDirCarLatLong");
             detailObj.MudanzaDirDesLatLong = DetalleMudanza.getString("MudanzaDirDesLatLong");
+            if(!DetalleMudanza.isNull("MudanzaEstatus"))
+                detailObj.MudanzaEstatus = DetalleMudanza.getInt("MudanzaEstatus");
 
             fillViews();
         } catch (JSONException e) {
@@ -226,7 +234,20 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         have_b.setText(getElevator(detailObj.MudanzaElevadorCargaCargar));
         precio.setText(detailObj.MudanzaCosto);
 
-        if(mudObj.MudanzaEstatusServicio == 6)
+        Log.d("root", root);
+        if(root.equals("com.mudtusuario.fragments.HistorialFragment")){
+            if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6)
+                initPros.setText(getResources().getString(R.string.pagar));
+            else if(detailObj.MudanzaEstatus == 1)
+                initPros.setText(getResources().getString(R.string.curso));
+            else if(detailObj.MudanzaEstatus == 3)
+                initPros.setText(getResources().getString(R.string.cancelado));
+            else if(detailObj.MudanzaEstatus == 4)
+                initPros.setText(getResources().getString(R.string.concluido));
+            else if(detailObj.MudanzaEstatus == 8)
+                initPros.setText(getResources().getString(R.string.pagada));
+                //initPros.setVisibility(View.INVISIBLE);
+        } else if(mudObj.MudanzaEstatusServicio == 6)
             initPros.setVisibility(View.INVISIBLE);
 
         ProgressBar progressBar = new ProgressBar(getContext());
@@ -246,26 +267,14 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
             case R.id.initPros:
                 if(title.contains("Detalle")) {
                     if(mudObj.MudanzaEstatusServicio != 6) {
-                        //if(CalculationByDistance() <= 100)
-                        //initPagoConnection();
-                        /*else
-                            showCustomDialog("No puedes iniciar",
-                                    "Debes estar por lo menos a 100 metros de distancia del punto de recogida para iniciar la mudanza",
-                                    "Continuar");*/
+
                     } else
                         showCustomDialog("No puedes iniciar",
                                 "Valida que no tengas una mudanza iniciada o que la fecha no sea próxima",
                                 "Continuar");
-                    /*if(Singleton.getIsActive() != null) {
-                        if(Singleton.getIsActive().idMud.equals(detailObj.MudanzaFolioServicio))
-                            initStatusConnection();
-                        else
-                            showCustomDialog("Espera un momento", "Tienes una mudanza activa y no puedes comenzar otra", "Aceptar");
-                    } else
-                        showCustomDialog("Espera un momento", "Tienes una mudanza activa y no puedes comenzar otra", "Aceptar");*/
                 } else if(title.contains("Solicitud")){
-                    //initPagoConnection();
-                    paypalIntent();
+                    if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6)
+                        paypalIntent();
                 }
                 break;
             case R.id.tel_lay:
@@ -345,6 +354,110 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         costo = costo.replace("MXN", "");
         costo = costo.replace(" ", "");
         return new PayPalPayment(new BigDecimal(costo), "MXN", "Mudanza", paymentIntent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PAYMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                if (confirm != null) {
+                    try {
+                        Log.i(TAG, confirm.toJSONObject().toString(4));
+                        JSONObject jsonObject = new JSONObject(confirm.toJSONObject().toString(4));
+                        JSONObject response = jsonObject.getJSONObject("response");
+                        initSendPayment(response.getString("id"));
+                        //Log.i(TAG, confirm.getPayment().toJSONObject().toString(4));
+                        //displayResultText("PaymentConfirmation info received from PayPal");
+                    } catch (JSONException e) {
+                        Log.e(TAG, "an extremely unlikely failure occurred: ", e);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i(TAG, "The user canceled.");
+            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                Log.i(TAG, "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+            }
+        } else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
+            if (resultCode == Activity.RESULT_OK) {
+                PayPalAuthorization auth =
+                        data.getParcelableExtra(PayPalFuturePaymentActivity.EXTRA_RESULT_AUTHORIZATION);
+                if (auth != null) {
+                    try {
+                        Log.i("FuturePaymentExample", auth.toJSONObject().toString(4));
+
+                        String authorization_code = auth.getAuthorizationCode();
+                        Log.i("FuturePaymentExample", authorization_code);
+
+                        /*sendAuthorizationToServer(auth);
+                        displayResultText("Future Payment code received from PayPal");*/
+
+                    } catch (JSONException e) {
+                        Log.e("FuturePaymentExample", "an extremely unlikely failure occurred: ", e);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i("FuturePaymentExample", "The user canceled.");
+            } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
+                Log.i(
+                        "FuturePaymentExample",
+                        "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+            }
+        } else if (requestCode == REQUEST_CODE_PROFILE_SHARING) {
+            if (resultCode == Activity.RESULT_OK) {
+                PayPalAuthorization auth =
+                        data.getParcelableExtra(PayPalProfileSharingActivity.EXTRA_RESULT_AUTHORIZATION);
+                if (auth != null) {
+                    try {
+                        Log.i("ProfileSharingExample", auth.toJSONObject().toString(4));
+
+                        String authorization_code = auth.getAuthorizationCode();
+                        Log.i("ProfileSharingExample", authorization_code);
+
+                        /*sendAuthorizationToServer(auth);
+                        displayResultText("Profile Sharing code received from PayPal");*/
+
+                    } catch (JSONException e) {
+                        Log.e("ProfileSharingExample", "an extremely unlikely failure occurred: ", e);
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.i("ProfileSharingExample", "The user canceled.");
+            } else if (resultCode == PayPalFuturePaymentActivity.RESULT_EXTRAS_INVALID) {
+                Log.i(
+                        "ProfileSharingExample",
+                        "Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+            }
+        }
+    }
+
+    private void initSendPayment(String payment){
+        Singleton.showLoadDialog(getFragmentManager());
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("MudanzaFolioServicio", mudObj.MudanzaFolioServicio);
+            jsonObject.put("MudanzaIdPago", payment);
+            Object[] objs = new Object[]{"PagarMudanza", 21, this, jsonObject};
+            ConnectToServer connectToServer = new ConnectToServer(objs);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getPaymentResponse(String result) {
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if(Integer.parseInt(jsonObject.getString("ReturnError")) == 200){
+                Singleton.showCustomDialog(getFragmentManager(),
+                        "¡Excelente!", jsonObject.getString("Mensaje"), "Continuar", 2);
+            } else {
+                Singleton.showCustomDialog(getFragmentManager(),
+                        "¡Atención!", jsonObject.getString("Mensaje"), "Continuar", 0);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Singleton.dissmissLoad();
     }
     //*********************************************
 

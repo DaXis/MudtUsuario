@@ -520,6 +520,9 @@ public class ConnectToServer {
             case 20:
                 ((MapFragment) o).getLatLonResponse(result);
                 break;
+            case 21:
+                ((ViajeDetailFragment) o).getPaymentResponse(result);
+                break;
         }
     }
 

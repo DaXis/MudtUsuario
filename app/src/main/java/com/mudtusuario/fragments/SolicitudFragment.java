@@ -116,6 +116,7 @@ public class SolicitudFragment extends Fragment implements View.OnClickListener 
         bundle.putSerializable("mudObj", mudObj);
         bundle.putInt("lay", lay);
         bundle.putString("title", "Solicitud");
+        bundle.putString("root", SolicitudFragment.class.getName());
         ViajeDetailFragment newItemFragment = new ViajeDetailFragment();
         newItemFragment.setArguments(bundle);
         Singleton.setCurrentFragment(newItemFragment);

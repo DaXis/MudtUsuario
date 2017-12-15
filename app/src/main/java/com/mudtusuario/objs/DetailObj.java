@@ -10,6 +10,6 @@ public class DetailObj implements Serializable {
             MudanzaPisoCarga, MudanzaFechaTentativaDescarga, MudanzaHoraTentativaDescarga, MudanzaDistanciaAproximada, MudanzaDirCarLatLong,
             MudanzaDirDesLatLong;
 
-    public int MudanzaElevadorCargaCargar;
+    public int MudanzaElevadorCargaCargar, MudanzaEstatus;
 
 }

@@ -100,4 +100,8 @@
     <string name="pagar">REALIZAR PAGO</string>
     <string name="pross_mud">MUDANZAS EN PROCESO</string>
     <string name="desing">Su mudanza aun no ha sido aprobada</string>
+    <string name="curso">EN CURSO</string>
+    <string name="cancelado">CANCELADO</string>
+    <string name="concluido">CONCLUIDA</string>
+    <string name="pagada">PAGADA</string>
 </resources>
