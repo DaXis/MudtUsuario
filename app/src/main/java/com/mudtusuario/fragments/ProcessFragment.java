@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,9 +33,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.mudtusuario.R;
 import com.mudtusuario.Singleton;
 import com.mudtusuario.dialogs.FinishMudDialog;
@@ -43,18 +47,27 @@ import com.mudtusuario.dialogs.PicDialog;
 import com.mudtusuario.objs.DetailObj;
 import com.mudtusuario.objs.MudObj;
 import com.mudtusuario.utils.ConnectToServer;
+import com.mudtusuario.utils.DirectionsJSONParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.TimeZone;
 
 public class ProcessFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
@@ -62,13 +75,14 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     private int lay, process = 1;
     private MudObj mudObj;
     private DetailObj detailObj;
-    private ImageView user_pic, current, pic1, pic2, transparentImageView;
-    private TextView user_name, tel, ubic_a, ubic_b, hour_a, hour_b, hour_c, hour_d, hour_e, currentTV;
+    private ImageView user_pic, current, transparentImageView, unidad, step1, step2, step3, step4, step5;
+    private TextView user_name, tel, ubic_a, ubic_b, hour_a, hour_b, hour_c, hour_d, hour_e, currentTV, unidad_txt, placa;
     private Button endMud;
     private LinearLayout init_process, second_step, trhid_step, fourth_step, fifth_step, tel_lay;
     private ScrollView mainScrollView;
     //private SupportMapFragment map;
     private GoogleMap googleMap;
+    private static final String ROUTE_MODE = "mode=driving";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +117,14 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         ProgressBar progressBar = new ProgressBar(getContext());
         Singleton.loadImage(detailObj.ClienteFoto, user_pic, progressBar);
 
+        unidad = (ImageView)rootView.findViewById(R.id.unidad);
+
+        step1 = (ImageView)rootView.findViewById(R.id.step1);
+        step2 = (ImageView)rootView.findViewById(R.id.step2);
+        step3 = (ImageView)rootView.findViewById(R.id.step3);
+        step4 = (ImageView)rootView.findViewById(R.id.step4);
+        step5 = (ImageView)rootView.findViewById(R.id.step5);
+
         user_name = (TextView)rootView.findViewById(R.id.user_name);
         tel = (TextView)rootView.findViewById(R.id.tel);
         user_name.setText(detailObj.ClienteNombre);
@@ -124,6 +146,12 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         hour_e = (TextView)rootView.findViewById(R.id.hour_e);
         hour_e.setText(detailObj.MudanzaHoraTentativaDescarga);
 
+        unidad_txt = (TextView)rootView.findViewById(R.id.unidad_txt);
+        unidad_txt.setText(detailObj.TipoUnidadDescrip);
+
+        placa = (TextView)rootView.findViewById(R.id.placa);
+        placa.setText(detailObj.UnidadPlacas);
+
         endMud = (Button)rootView.findViewById(R.id.endMud);
         endMud.setOnClickListener(this);
 
@@ -137,10 +165,6 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         fifth_step = (LinearLayout)rootView.findViewById(R.id.fifth_step);
         tel_lay = (LinearLayout)rootView.findViewById(R.id.tel_lay);
         tel_lay.setOnClickListener(this);
-        pic1 = (ImageView)rootView.findViewById(R.id.pic1);
-        pic1.setOnClickListener(this);
-        pic2 = (ImageView)rootView.findViewById(R.id.pic2);
-        pic2.setOnClickListener(this);
 
         solbedIssue(rootView);
 
@@ -167,10 +191,6 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
                 break;
             case R.id.tel_lay:
                 //callIntent(detailObj.ClienteTelefono);
-                break;
-            case R.id.pic1:
-                break;
-            case R.id.pic2:
                 break;
         }
     }
@@ -242,15 +262,25 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     }
 
     private void setPoints(){
+        Marker marker1, marker2;
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(getLatLon(detailObj.MudanzaDirCarLatLong));
         markerOptions.title("Punto de carga");
-        googleMap.addMarker(markerOptions);
+        markerOptions.draggable(true);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_inicio));
+        marker1 = googleMap.addMarker(markerOptions);
 
         MarkerOptions markerOptions0 = new MarkerOptions();
         markerOptions0.position(getLatLon(detailObj.MudanzaDirDesLatLong));
         markerOptions0.title("Punto de descarga");
-        googleMap.addMarker(markerOptions0);
+        markerOptions0.draggable(true);
+        markerOptions0.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_final));
+        marker2 = googleMap.addMarker(markerOptions0);
+
+        LatLng pointIni = marker1.getPosition(), pointEnd = marker2.getPosition();
+        ArrayList<LatLng> aux0 = new ArrayList<LatLng>();
+        aux0.add(pointEnd);
+        drawLocationsRoutes(pointIni, aux0);
     }
 
     private LatLng getLatLon(String arg){
@@ -290,5 +320,204 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         //date = new SimpleDateFormat("dd 'de' MMMM',' hh:mm a").format(new Date(time));
         return date;
     }
+
+    //**************************************************
+    /***
+     * Draw Locations routes
+     * @param curLocation
+     * @param locationsArray
+     */
+    private boolean cont;
+    private void drawLocationsRoutes(LatLng curLocation, ArrayList<LatLng> locationsArray) {
+        //tvLoading.setText("loading routes...");
+
+        // Checks, whether start and end locations are captured
+        cont = false;
+        LatLng origin ;
+        LatLng dest ;
+        for (int i = 0; i < locationsArray.size(); i++) {
+            if (i==0) {
+                origin=curLocation;
+                dest=locationsArray.get(i);
+            }
+            else {
+                origin=locationsArray.get(i-1);
+                dest=locationsArray.get(i);
+            }
+            // Getting URL to the Google Directions API
+            String url = getDirectionsUrl(origin, dest);
+            ProcessFragment.DownloadTask downloadTask = new ProcessFragment.DownloadTask();
+            // Start downloading json data from Google Directions API
+            downloadTask.execute(url);
+        }
+    }
+
+    private String getDirectionsUrl(LatLng origin,LatLng dest){
+
+        // Origin of route
+        String str_origin = "origin="+origin.latitude+","+origin.longitude;
+        // Destination of route
+        String str_dest = "destination="+dest.latitude+","+dest.longitude;
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin+"&"+str_dest+"&"+sensor+"&"+ROUTE_MODE;
+
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+        return url;
+    }
+
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+            String data = "";
+
+            try{
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            }catch(Exception e){
+                Log.d("Background Task",e.toString());
+            }
+            return data;
+        }
+
+        // Executes in UI thread, after the execution of
+        // doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ProcessFragment.ParserTask parserTask = new ProcessFragment.ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+
+        }
+    }
+
+    /** A method to download json data from url */
+    private String downloadUrl(String strUrl) throws IOException{
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try{
+            URL url = new URL(strUrl);
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+            // Connecting to url
+            urlConnection.connect();
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            StringBuffer sb  = new StringBuffer();
+            String line = "";
+            while( ( line = br.readLine())  != null){
+                sb.append(line);
+            }
+            data = sb.toString();
+            br.close();
+        }catch(Exception e){
+            Log.d("Exception while downloading url", e.toString());
+        }finally{
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    /** A class to parse the Google Places in JSON format */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >{
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try{
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        // Executes in UI thread, after the parsing process
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+            String distance = "";
+            String duration = "";
+
+            if(result != null){
+                if(result.size()<1){
+                    //if(result.isEmpty() || result != null){
+                    //Toast.makeText(Memory.getAppContext(), "No Points", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Traversing through all the routes
+                for(int i=0;i<result.size();i++){
+                    points = new ArrayList<LatLng>();
+                    lineOptions = new PolylineOptions();
+
+                    // Fetching i-th route
+                    List<HashMap<String, String>> path = result.get(i);
+
+                    // Fetching all the points in i-th route
+                    for(int j=0;j<path.size();j++){
+                        HashMap<String,String> point = path.get(j);
+
+                        if(j==0){	// Get distance from the list
+                            distance = (String)point.get("distance");
+                            continue;
+                        }else if(j==1){ // Get duration from the list
+                            duration = (String)point.get("duration");
+                            continue;
+                        }
+
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
+
+                        points.add(position);
+                    }
+
+                    // Adding all the points in the route to LineOptions
+                    lineOptions.addAll(points);
+                    lineOptions.width(10);
+
+                    if (!cont){
+                        lineOptions.color(getResources().getColor(R.color.color_accent));
+                        cont = true;
+                    }
+                    else {
+                        lineOptions.color(getResources().getColor(R.color.color_accent));
+                    }
+                    //tvLoading.setText("ok...");
+
+                }
+
+                // Drawing polyline in the Google Map for the i-th route
+                if(googleMap != null && lineOptions != null)
+                    googleMap.addPolyline(lineOptions);
+            }
+        }
+    }
+    //**************************************************
 
 }

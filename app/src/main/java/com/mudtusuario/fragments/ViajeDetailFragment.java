@@ -236,7 +236,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
 
         Log.d("root", root);
         if(root.equals("com.mudtusuario.fragments.HistorialFragment")){
-            if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6)
+            if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6 || detailObj.MudanzaEstatus == 7)
                 initPros.setText(getResources().getString(R.string.pagar));
             else if(detailObj.MudanzaEstatus == 0)
                 initPros.setText(getResources().getString(R.string.pendiente));
@@ -273,18 +273,33 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
                     if(mudObj.MudanzaEstatusServicio != 6) {
 
                     } else
-                        showCustomDialog("No puedes iniciar",
-                                "Valida que no tengas una mudanza iniciada o que la fecha no sea próxima",
-                                "Continuar");
+                        showCustomDialog("", "", "Continuar");
                 } else if(title.contains("Solicitud")){
-                    if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6 || detailObj.MudanzaEstatus == 1)
+                    if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6 || detailObj.MudanzaEstatus == 1 ||
+                            detailObj.MudanzaEstatus == 7)
                         paypalIntent();
+                    else if(detailObj.MudanzaEstatus == 2)
+                        initProcess();
                 }
                 break;
             case R.id.tel_lay:
                 callIntent(detailObj.ClienteTelefono);
                 break;
         }
+    }
+
+    public void initProcess(){
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("mudObj", mudObj);
+        bundle.putSerializable("detailObj", detailObj);
+        bundle.putInt("lay", lay);
+        ProcessFragment processFragment = new ProcessFragment();
+        processFragment.setArguments(bundle);
+        Singleton.setCurrentFragment(processFragment);
+        getFragmentManager().beginTransaction()
+                .replace(lay, processFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void showCustomDialog(String title, String body, String action){
