@@ -69,6 +69,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class ProcessFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback {
 
@@ -83,6 +86,9 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     //private SupportMapFragment map;
     private GoogleMap googleMap;
     private static final String ROUTE_MODE = "mode=driving";
+    private Timer timer;
+    private static final long TIME = TimeUnit.SECONDS.toMillis(5);
+    private Marker car;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +112,15 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         Singleton.getActionButon().setVisibility(View.INVISIBLE);
         Singleton.getActionText().setText("Proceso del viaje");
         Singleton.getMenuBtn().setImageResource(R.drawable.ic_back);
-        Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, getActivity().findViewById(R.id.left_drawer));
+        Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+                getActivity().findViewById(R.id.left_drawer));
+        initLoop();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopLoop();
     }
 
     @Override
@@ -171,6 +185,8 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         SupportMapFragment map = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         map.getMapAsync(this);
 
+        initConnection();
+
         return rootView;
     }
 
@@ -201,23 +217,12 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         finishMudDialog.show(getFragmentManager(), "finish dialog");
     }
 
-    private void initConnection(int id){
+    private void initConnection(){
         Singleton.showLoadDialog(getFragmentManager());
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("MudanzaFolioServicio", detailObj.MudanzaFolioServicio);
-            jsonObject.put("MudanzaEstatusServicio", id);
-
-            //JSONObject jsonObject1 = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
-            JSONObject jsonObject0 = new JSONObject();
-            jsonObject0.put("LocalizacionLatitud", Singleton.getLatitud());
-            jsonObject0.put("LocalizacionLongitud", Singleton.getLongitude());
-            jsonArray.put(jsonObject0);
-            //jsonObject1.put("cGeolocations", jsonArray);
-
-            jsonObject.put("cGeolocations", jsonArray);
-            Object[] objs = new Object[]{"SetGeolocation", 6, this, jsonObject};
+            Object[] objs = new Object[]{"GetMudanzaDetalleCliente", 6, this, jsonObject};
             ConnectToServer connectToServer = new ConnectToServer(objs);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -225,9 +230,27 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     }
 
     public void getResponse(String result) {
-        onUIThread(currentTV, System.currentTimeMillis());
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            JSONObject DetalleMudanza = jsonObject.getJSONObject("DetalleMudanza");
+            JSONArray Status = DetalleMudanza.getJSONArray("Status");
+            if(Status.length() > 0){
+                if(Status.length() >= 1)
+                    step1.setVisibility(View.VISIBLE);
+                if(Status.length() >= 2)
+                    step1.setVisibility(View.VISIBLE);
+                if(Status.length() >= 3)
+                    step1.setVisibility(View.VISIBLE);
+                if(Status.length() >= 4)
+                    step1.setVisibility(View.VISIBLE);
+                if(Status.length() == 5)
+                    step1.setVisibility(View.VISIBLE);
+            } else
+                step1.setVisibility(View.INVISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Singleton.dissmissLoad();
-        process++;
     }
 
     private void solbedIssue(View view){
@@ -519,5 +542,85 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
         }
     }
     //**************************************************
+
+    private void initLoop(){
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            synchronized public void run() {
+                getLatLon();
+            }
+        }, 0, TIME);
+    }
+
+    private void stopLoop(){
+        timer.cancel();
+    }
+
+    private void getLatLon(){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("MudanzaFolioServicio", detailObj.MudanzaFolioServicio);
+            Object[] objs = new Object[]{"GetMudanzaLastPoint", 22, this, jsonObject};
+            ConnectToServer connectToServer = new ConnectToServer(objs);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void getLatLonResponse(String result){
+        try {
+            final JSONObject jsonObject = new JSONObject(result);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        setCarPin(jsonObject.getString("UltimaUbicacion"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setCarPin(String latLon){
+        if(car == null){
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(getLatLon(latLon));
+            markerOptions.title("Ubicación de la unidad");
+            markerOptions.draggable(true);
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.zoom4));
+            car = googleMap.addMarker(markerOptions);
+        } else {
+            car.remove();
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(getLatLon(latLon));
+            markerOptions.title("Ubicación de la unidad");
+            markerOptions.draggable(true);
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.zoom4));
+            car = googleMap.addMarker(markerOptions);
+        }
+    }
+
+    private double auxLat, auxLon;
+    private LatLng getLatLonDemo(String arg){
+        String[] aux = arg.split("[,]");
+        String aux0 =  aux[0].replace("null", "");
+        String aux1 =  aux[1].replace("null", "");
+
+        if(auxLat == 0.0 && auxLon == 0.0){
+            auxLat = Double.parseDouble(aux0);
+            auxLon = Double.parseDouble(aux1);
+        } else {
+            auxLat = auxLat+0.001;
+            auxLon = auxLon+0.001;
+        }
+
+        Log.d(""+auxLat, ""+auxLon);
+        LatLng latLng = new LatLng(auxLat, auxLon);
+        return latLng;
+    }
 
 }

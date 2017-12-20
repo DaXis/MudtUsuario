@@ -285,7 +285,8 @@ public class ConnectToServer {
         protected String doInBackground(Object[]... params) {
             aux = params[0];
             String sUrl = (String)aux[0], result = "";
-            sUrl = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+sUrl+"&sensor=true";
+            sUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+sUrl+"&sensor=true&region=mx"+
+                    "&key=AIzaSyA7KFyUxKGqLWVsLaIWoubma-koYClWnVM";
             //JSONObject json = (JSONObject)aux[3];
             Log.d("ConnectToServer_URL --->", sUrl);
 
@@ -360,7 +361,8 @@ public class ConnectToServer {
         protected String doInBackground(Object[]... params) {
             aux = params[0];
             String sUrl = (String)aux[0], result = "";
-            sUrl = "http://maps.googleapis.com/maps/api/geocode/json?address="+sUrl+"&sensor=true_or_false";
+            sUrl = "https://maps.googleapis.com/maps/api/geocode/json?address="+sUrl+"&sensor=true_or_false&region=mx"+
+            "&key=AIzaSyA7KFyUxKGqLWVsLaIWoubma-koYClWnVM";
             //sUrl = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+sUrl+"&sensor=true";
             //JSONObject json = (JSONObject)aux[3];
             Log.d("ConnectToServer_URL --->", sUrl);
@@ -522,6 +524,9 @@ public class ConnectToServer {
                 break;
             case 21:
                 ((ViajeDetailFragment) o).getPaymentResponse(result);
+                break;
+            case 22:
+                ((ProcessFragment) o).getLatLonResponse(result);
                 break;
         }
     }
