@@ -298,12 +298,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initUser(){
-        /*userName = (TextView)findViewById(R.id.name);
+        userName = (TextView)findViewById(R.id.name);
         userName.setText(Singleton.getUSerObj().NombreCompleto);
 
         ProgressBar progressBar = new ProgressBar(this);
         userPic = (ImageView)findViewById(R.id.user_pic);
-        Singleton.loadImage(Singleton.getUSerObj().Foto, userPic, progressBar);*/
+        Singleton.loadImage(Singleton.getUSerObj().Foto, userPic, progressBar);
 
         LinearLayout menu_prox = (LinearLayout)findViewById(R.id.menu_solis);
         menu_prox.setOnClickListener(this);

@@ -79,7 +79,8 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
     private MudObj mudObj;
     private DetailObj detailObj;
     private ImageView user_pic, current, transparentImageView, unidad, step1, step2, step3, step4, step5;
-    private TextView user_name, tel, ubic_a, ubic_b, hour_a, hour_b, hour_c, hour_d, hour_e, currentTV, unidad_txt, placa;
+    private TextView user_name, tel, ubic_a, ubic_b, hour_a, hour_b, hour_c, hour_d, hour_e, currentTV, unidad_txt, placa, unid_a,
+            unid_b, caps;
     private Button endMud;
     private LinearLayout init_process, second_step, trhid_step, fourth_step, fifth_step, tel_lay;
     private ScrollView mainScrollView;
@@ -165,6 +166,14 @@ public class ProcessFragment extends Fragment implements View.OnClickListener, O
 
         placa = (TextView)rootView.findViewById(R.id.placa);
         placa.setText(detailObj.UnidadPlacas);
+
+        unid_a = (TextView)rootView.findViewById(R.id.unid_a);
+
+        unid_b = (TextView)rootView.findViewById(R.id.unid_b);
+        unid_b.setText(mudObj.UnidadPlacas);
+
+        caps = (TextView)rootView.findViewById(R.id.caps);
+        caps.setText(mudObj.TipoUnidadDescrip);
 
         endMud = (Button)rootView.findViewById(R.id.endMud);
         endMud.setOnClickListener(this);

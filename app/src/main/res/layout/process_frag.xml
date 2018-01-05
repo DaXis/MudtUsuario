@@ -214,8 +214,46 @@
                             android:layout_marginRight="15dp"
                             android:text="Av calle numero"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/primary_text"
-                            android:textStyle="bold" />
+                            android:textColor="@color/primary_text"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp">
+
+                            <com.mudtusuario.custom.CustomTextView
+                                android:id="@+id/unid_a"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Unidad"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="@color/primary_text"
+                                android:textStyle="bold" />
+
+                            <com.mudtusuario.custom.CustomTextView
+                                android:id="@+id/unid_b"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="MX3"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="@color/primary_color"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <com.mudtusuario.custom.CustomTextView
+                            android:id="@+id/caps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Camión de tres toneladas"
+                            android:textColor="@color/secondary_text"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_marginTop="10dp"/>
 
                     </LinearLayout>
 

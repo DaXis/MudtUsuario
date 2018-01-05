@@ -31,7 +31,8 @@
     <string name="aprox">COSTO</string>
     <string name="btn_init">INICIAR PROCESO</string>
     <string name="hist_muds">HISTORIAL DE MUDANZAS</string>
-    <string name="MAP_API">AIzaSyDpbgp6w7PXROQzRnZX1P1Sd_9P3V85ucw</string>
+    <!--<string name="MAP_API">AIzaSyDpbgp6w7PXROQzRnZX1P1Sd_9P3V85ucw</string>-->
+    <string name="MAP_API">AIzaSyBz1c8gfZux51tLfdYrJF3ybkzIYpVT2Pk</string>
     <string name="mud_pross">Mundanza en proceso</string>
     <string name="init_mud_btn">EMPEZAR MUDANZA</string>
     <string name="end_mud_btn">FINALIZAR MUDANZA</string>

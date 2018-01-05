@@ -5,12 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.EditText;
 
 import com.mudtusuario.interfaces.DrawableClickListener;
 
@@ -50,8 +46,7 @@ public class CustomEditText extends android.support.v7.widget.AppCompatEditText 
     }
 
     @Override
-    public void setCompoundDrawables(Drawable left, Drawable top,
-                                     Drawable right, Drawable bottom) {
+    public void setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom) {
         if (left != null) {
             drawableLeft = left;
         }
