@@ -63,7 +63,14 @@
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"/>
+            android:textColor="@color/primary_text"
+            android:layout_marginBottom="5dp"/>
+
+        <com.mudtusuario.custom.CustomTextView
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_color"/>
 
     </LinearLayout>
 

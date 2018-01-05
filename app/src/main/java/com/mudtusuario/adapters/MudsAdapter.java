@@ -65,7 +65,24 @@ public class MudsAdapter extends BaseAdapter {
         placas.setText(array.get(position).MudanzaFolioServicio);
 
         TextView date = ViewHolder.get(convertView, R.id.date);
-        date.setText(array.get(position).MudanzaFechaSolicitud);
+        date.setText(array.get(position).MudanzaFechaSolicitud+" "+array.get(position).MudanzaHoraSolicitud);
+
+        TextView status = ViewHolder.get(convertView, R.id.status);
+        if(array.get(position).MudanzaEstatusServicio == 5 ||
+                array.get(position).MudanzaEstatusServicio == 6 || array.get(position).MudanzaEstatusServicio == 7)
+            status.setText(Singleton.getMainActivity().getResources().getString(R.string.pagar));
+        else if(array.get(position).MudanzaEstatusServicio == 0)
+            status.setText(Singleton.getMainActivity().getResources().getString(R.string.pendiente));
+        else if(array.get(position).MudanzaEstatusServicio == 1)
+            status.setText(Singleton.getMainActivity().getResources().getString(R.string.pagar));
+        else if(array.get(position).MudanzaEstatusServicio == 2)
+            status.setText(Singleton.getMainActivity().getResources().getString(R.string.curso));
+        else if(array.get(position).MudanzaEstatusServicio == 3)
+            status.setText(Singleton.getMainActivity().getResources().getString(R.string.cancelado));
+        else if(array.get(position).MudanzaEstatusServicio == 4)
+            status.setText(Singleton.getMainActivity().getResources().getString(R.string.concluido));
+        else if(array.get(position).MudanzaEstatusServicio == 8)
+            status.setText(Singleton.getMainActivity().getResources().getString(R.string.pagada));
 
         ImageView img_cat = ViewHolder.get(convertView, R.id.img_cat);
 
