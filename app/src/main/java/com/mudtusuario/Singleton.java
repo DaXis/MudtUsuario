@@ -64,7 +64,7 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
     private static ImageView actionButon, menuBtn;
     private static ProgressBar actionProgress;
     private static DrawerLayout drawerLayout;
-    private static Fragment fragment;
+    private static Fragment fragment, subFragment, histFragment;
 
     private static ImageLoaderConfiguration config;
     private static DisplayImageOptions defaultOptions, defaultOptionsUnit;
@@ -215,6 +215,22 @@ public class Singleton extends Application implements GpsConfiguration.OnGpsLoca
 
     public static Fragment getCurrentFragment(){
         return fragment;
+    }
+
+    public static void setSubCurrentFragment(Fragment arg){
+        subFragment = arg;
+    }
+
+    public static Fragment getSubCurrentFragment(){
+        return subFragment;
+    }
+
+    public static void setHistFragment(Fragment arg){
+        histFragment = arg;
+    }
+
+    public static Fragment getHistFragment(){
+        return histFragment;
     }
 
     private static void initImageLoader(Context context) {

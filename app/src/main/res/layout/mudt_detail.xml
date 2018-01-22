@@ -433,19 +433,22 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:textColor="@color/secondary_text" />
 
+                            <com.mudtusuario.custom.CustomTextView
+                                android:id="@+id/dist"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="Distancia aproximada"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/secondary_text"
+                                android:layout_marginTop="10dp"/>
+
                         </LinearLayout>
 
                     </LinearLayout>
 
-                    <com.mudtusuario.custom.CustomTextView
-                        android:id="@+id/dist"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Distancia 2,56 km"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/secondary_text" />
+                    <!---->
 
                     <LinearLayout
                         android:layout_width="match_parent"

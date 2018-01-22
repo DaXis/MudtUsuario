@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.mudtusuario.R;
 import com.mudtusuario.Singleton;
+import com.mudtusuario.fragments.InitMudFragment;
 
 public class CustomDialog extends DialogFragment implements View.OnClickListener {
 
@@ -62,6 +63,13 @@ public class CustomDialog extends DialogFragment implements View.OnClickListener
         actionBtn.setText(action);
         actionBtn.setOnClickListener(this);
 
+        Button cancel = (Button)v.findViewById(R.id.cancel);
+        if(actionId == 3)
+            cancel.setVisibility(View.VISIBLE);
+        else
+            cancel.setVisibility(View.INVISIBLE);
+        cancel.setOnClickListener(this);
+
         return builder.create();
     }
 
@@ -81,7 +89,14 @@ public class CustomDialog extends DialogFragment implements View.OnClickListener
                         Singleton.dissmissCustom();
                         Singleton.getMainActivity().onBackPressed();
                         break;
+                    case 3:
+                        ((InitMudFragment)Singleton.getCurrentFragment()).initAltaMudtConnect();
+                        Singleton.dissmissCustom();
+                        break;
                 }
+                break;
+            case R.id.cancel:
+                Singleton.dissmissCustom();
                 break;
         }
     }

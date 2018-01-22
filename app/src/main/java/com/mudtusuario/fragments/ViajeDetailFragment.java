@@ -51,7 +51,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
     private MudObj mudObj;
     private ImageView user_pic;
     private TextView user_name, tel, date, hour, loc, unid_a, unid_b, caps, piso, have, desc, date_b, hour_b, loc_b,
-            dist, piso_b, have_b, precio, precioHint;
+            dist, piso_b, have_b, precio, precioHint, estatus;
     private Button initPros;
     private DetailObj detailObj;
     private String title, root;
@@ -60,8 +60,10 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
     //******************************
     private static final String TAG = "paymentExample";
     private static final String CONFIG_ENVIRONMENT = PayPalConfiguration.ENVIRONMENT_SANDBOX;
-    private static final String CONFIG_CLIENT_ID = "AY3Btp31GxUmhMyBUdhsqlfbWiaosu6f1WgWRHtCnc_H4ssMpad0IAhk-" +
-            "_3iYQwig5QkUQhamD9FtFD0";
+    /*private static final String CONFIG_CLIENT_ID = "AY3Btp31GxUmhMyBUdhsqlfbWiaosu6f1WgWRHtCnc_H4ssMpad0IAhk-" +
+            "_3iYQwig5QkUQhamD9FtFD0";*/
+    private static final String CONFIG_CLIENT_ID ="AT_3ZuVBsGQ1b9Ywpq687QDMHiECTyEwCMpL0ty1v7w2Ie4gMBg_7_l-83e--Pma0bsg7SrHSggAWDHO";
+    //AW87OOn00O0-jbBT2TIS1_8dRuftlJNOeC9QZvp4l-Btm1JbrklK-elshCy1nCe9evxPSL6UYXHdynKs
     private static final int REQUEST_CODE_PAYMENT = 1;
     private static final int REQUEST_CODE_FUTURE_PAYMENT = 2;
     private static final int REQUEST_CODE_PROFILE_SHARING = 3;
@@ -125,6 +127,7 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         have_b = (TextView)rootView.findViewById(R.id.have_b);
         precio = (TextView)rootView.findViewById(R.id.precio);
         precioHint = (TextView)rootView.findViewById(R.id.precioHint);
+        estatus = (TextView)rootView.findViewById(R.id.estatus);
 
         initPros = (Button)rootView.findViewById(R.id.initPros);
         initPros.setOnClickListener(this);
@@ -215,8 +218,9 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
             desing_lay.setVisibility(View.VISIBLE);
         }
 
-        user_name.setText(detailObj.ClienteNombre);
-        tel.setText(detailObj.ClienteTelefono);
+        user_name.setText("");
+        tel.setText(detailObj.TipoUnidadDescrip);
+
         date.setText(detailObj.MudanzaFechaSolicitud);
         hour.setText(detailObj.MudanzaHoraSolicitud);
         loc.setText(detailObj.MudanzaDireccionCarga);
@@ -235,27 +239,40 @@ public class ViajeDetailFragment extends Fragment implements View.OnClickListene
         precio.setText(detailObj.MudanzaCosto);
 
         Log.d("root", root);
-        if(root.equals("com.mudtusuario.fragments.HistorialFragment")){
-            if(detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6 || detailObj.MudanzaEstatus == 7)
+        if(root.equals("com.mudtusuario.fragments.HistorialFragment")) {
+            if (detailObj.MudanzaEstatus == 5 || detailObj.MudanzaEstatus == 6 || detailObj.MudanzaEstatus == 7) {
                 initPros.setText(getResources().getString(R.string.pagar));
-            else if(detailObj.MudanzaEstatus == 0)
+                estatus.setText(getResources().getString(R.string.pagar));
+            } else if (detailObj.MudanzaEstatus == 0) {
                 initPros.setText(getResources().getString(R.string.pendiente));
-            else if(detailObj.MudanzaEstatus == 1)
+                estatus.setText(getResources().getString(R.string.pendiente));
+                initPros.setVisibility(View.INVISIBLE);
+            } else if (detailObj.MudanzaEstatus == 1) {
                 initPros.setText(getResources().getString(R.string.pagar));
-            else if(detailObj.MudanzaEstatus == 2)
+                estatus.setText(getResources().getString(R.string.pagar));
+            } else if (detailObj.MudanzaEstatus == 2) {
                 initPros.setText(getResources().getString(R.string.curso));
-            else if(detailObj.MudanzaEstatus == 3)
+                estatus.setText(getResources().getString(R.string.curso));
+                initPros.setVisibility(View.INVISIBLE);
+            } else if (detailObj.MudanzaEstatus == 3) {
                 initPros.setText(getResources().getString(R.string.cancelado));
-            else if(detailObj.MudanzaEstatus == 4)
+                estatus.setText(getResources().getString(R.string.cancelado));
+                initPros.setVisibility(View.INVISIBLE);
+            } else if (detailObj.MudanzaEstatus == 4) {
                 initPros.setText(getResources().getString(R.string.concluido));
-            else if(detailObj.MudanzaEstatus == 8)
+                initPros.setVisibility(View.INVISIBLE);
+                estatus.setText(getResources().getString(R.string.concluido));
+            } else if (detailObj.MudanzaEstatus == 8) {
                 initPros.setText(getResources().getString(R.string.pagada));
-                //initPros.setVisibility(View.INVISIBLE);
-        } else if(mudObj.MudanzaEstatusServicio == 6)
-            initPros.setVisibility(View.INVISIBLE);
+                initPros.setVisibility(View.INVISIBLE);
+                estatus.setText(getResources().getString(R.string.pagada));
+            } else if (mudObj.MudanzaEstatusServicio == 6) {
+                initPros.setVisibility(View.INVISIBLE);
+            }
+        }
 
-        ProgressBar progressBar = new ProgressBar(getContext());
-        Singleton.loadImage(detailObj.ClienteFoto, user_pic, progressBar);
+        /*ProgressBar progressBar = new ProgressBar(getContext());
+        Singleton.loadImage(detailObj.ClienteFoto, user_pic, progressBar);*/
     }
 
     private String getElevator(int arg){

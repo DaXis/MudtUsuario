@@ -130,7 +130,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -172,7 +172,25 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-            </LinearLayout>
+            </LinearLayout>-->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_movil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp">
+
+                <com.mudtusuario.custom.CustomEditText
+                    android:id="@+id/movil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="@string/movil_hint"
+                    android:textColor="@color/primary_text"/>
+
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_pass"

@@ -2,11 +2,16 @@ package com.mudtusuario.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,12 +29,13 @@ import java.util.ArrayList;
 
 public class HistorialFragment extends Fragment implements View.OnClickListener {
 
-    private int lay, arg;
-    private ListView mudts;
-    private ArrayList<MudObj> array = new ArrayList<>();
-    private MudsAdapter adapter;
+    private int lay;
     private String title;
-    //private Button btn_act, btn_ant;
+    private Button procss, fnshd;
+    private FrameLayout subContent;
+    private ProcessMudtFragment processMudtFragment;
+    private FinishedMudtFragment finishedMudtFragment;
+    private LinearLayout btns_lay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,30 +54,43 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
     public void onResume(){
         super.onResume();
         Singleton.setCurrentFragment(this);
+        Singleton.setHistFragment(this);
 
         Singleton.getActionButon().setVisibility(View.INVISIBLE);
         Singleton.getActionText().setText("");
-        Singleton.getMenuBtn().setImageResource(R.drawable.ic_back);
-        Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, getActivity().findViewById(R.id.left_drawer));
+        Singleton.getMenuBtn().setImageResource(R.drawable.ic_menu);
+        Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, getActivity().findViewById(R.id.left_drawer));
+
+        if(processMudtFragment == null || finishedMudtFragment == null){
+            processMudtFragment = new ProcessMudtFragment();
+            finishedMudtFragment = new FinishedMudtFragment();
+        }
     }
+
+    /*@Override
+    public void onPause(){
+        super.onPause();
+        if(btns_lay != null)
+            btns_lay.setVisibility(View.GONE);
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.main_frag, container, false);
+        View rootView = inflater.inflate(R.layout.main_frag_cont, container, false);
 
-        /*TextView title = (TextView)rootView.findViewById(R.id.title);
-        title.setText(this.title);*/
+        processMudtFragment = new ProcessMudtFragment();
+        finishedMudtFragment = new FinishedMudtFragment();
 
-        /*btn_act = (Button)rootView.findViewById(R.id.btn_act);
-        btn_act.setOnClickListener(this);
+        procss = (Button)rootView.findViewById(R.id.procss);
+        procss.setOnClickListener(this);
 
-        btn_ant = (Button)rootView.findViewById(R.id.btn_ant);
-        btn_ant.setOnClickListener(this);*/
+        fnshd = (Button)rootView.findViewById(R.id.fnshd);
+        fnshd.setOnClickListener(this);
 
-        mudts = (ListView)rootView.findViewById(R.id.mudts);
-        adapter = new MudsAdapter(this, array);
-        mudts.setAdapter(adapter);
-        initConnection();
+        btns_lay = (LinearLayout)rootView.findViewById(R.id.btns_lay);
+
+        subContent = (FrameLayout)rootView.findViewById(R.id.subContent);
+        initProcessFragment();
 
         return rootView;
     }
@@ -79,95 +98,57 @@ public class HistorialFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            /*case R.id.btn_act:
-                //btnsBg(0);
+            case R.id.procss:
+                procss.setBackgroundResource(R.drawable.osc_gray_rect);
+                fnshd.setBackgroundResource(R.drawable.gray_rect);
+                initProcessFragment();
                 break;
-            case R.id.btn_ant:
-                //btnsBg(1);
-                break;*/
-        }
-    }
-
-    private void initConnection(){
-        Singleton.showLoadDialog(getFragmentManager());
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("ClienteId", Singleton.getUSerObj().GUID);
-            jsonObject.put("Historial", arg);
-            Object[] objs = new Object[]{"GetMudanzaListadoCliente", 4, this, jsonObject};
-            ConnectToServer connectToServer = new ConnectToServer(objs);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getResponse(String result) {
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            JSONArray jsonArray = jsonObject.getJSONArray("ListadoMudanzas");
-            array.clear();
-            for(int i = 0; i < jsonArray.length(); i++){
-                JSONObject aux = jsonArray.getJSONObject(i);
-                MudObj mudObj = new MudObj();
-                mudObj.ClienteFoto = aux.getString("ClienteFoto");
-                mudObj.ClienteId = aux.getString("ClienteId");
-                mudObj.ClienteNombre = aux.getString("ClienteNombre");
-                mudObj.MudanzaDireccionCarga = aux.getString("MudanzaDireccionCarga");
-                mudObj.MudanzaDireccionDescarga = aux.getString("MudanzaDireccionDescarga");
-                mudObj.MudanzaEstatusServicio = aux.getInt("MudanzaEstatusServicio");
-                mudObj.MudanzaFechaSolicitud = aux.getString("MudanzaFechaSolicitud");
-                mudObj.MudanzaFolioServicio = aux.getString("MudanzaFolioServicio");
-                mudObj.MudanzaHoraSolicitud = aux.getString("MudanzaHoraSolicitud");
-                mudObj.TipoUnidadDescrip = aux.getString("SGTipoUnidadDesc");
-                mudObj.UnidadFoto = aux.getString("SGTipoUnidadFoto");
-                mudObj.UnidadPlacas = aux.getString("SGTipoUnidadId");
-                array.add(mudObj);
-            }
-            adapter.updateAdapter(array);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Singleton.dissmissLoad();
-    }
-
-    public void initDetail(MudObj mudObj){
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("mudObj", mudObj);
-        bundle.putInt("lay", lay);
-        bundle.putString("title", "Solicitud");
-        bundle.putString("root", HistorialFragment.class.getName());
-        ViajeDetailFragment newItemFragment = new ViajeDetailFragment();
-        newItemFragment.setArguments(bundle);
-        Singleton.setCurrentFragment(newItemFragment);
-        getFragmentManager().beginTransaction()
-                .replace(lay, newItemFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    /*private void btnsBg(int arg){
-        switch(arg){
-            case 0:
-                btn_act.setBackgroundResource(R.drawable.orange_rect);
-                btn_ant.setBackgroundResource(R.drawable.white_rect);
-
-                btn_act.setTextColor(getResources().getColor(R.color.text_icons));
-                btn_ant.setTextColor(getResources().getColor(R.color.primary_color));
-
-                this.arg = 0;
-                initConnection();
-                break;
-            case 1:
-                btn_act.setBackgroundResource(R.drawable.white_rect);
-                btn_ant.setBackgroundResource(R.drawable.orange_rect);
-
-                btn_act.setTextColor(getResources().getColor(R.color.primary_color));
-                btn_ant.setTextColor(getResources().getColor(R.color.text_icons));
-
-                this.arg = 1;
-                initConnection();
+            case R.id.fnshd:
+                fnshd.setBackgroundResource(R.drawable.osc_gray_rect);
+                procss.setBackgroundResource(R.drawable.gray_rect);
+                initFinishFragment();
                 break;
         }
+    }
+
+    private void removeFragments(){
+        if(Singleton.getSubCurrentFragment() != null){
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.remove(Singleton.getSubCurrentFragment()).commit();
+        }
+    }
+
+    private void initProcessFragment(){
+        if(Singleton.getSubCurrentFragment() != processMudtFragment){
+            removeFragments();
+            Bundle bundle = new Bundle();
+            bundle.putInt("lay", lay);
+            if(processMudtFragment.getArguments() == null)
+                processMudtFragment.setArguments(bundle);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(subContent.getId(), processMudtFragment).commit();
+        }
+    }
+
+    private void initFinishFragment(){
+        if(Singleton.getSubCurrentFragment() != finishedMudtFragment){
+            removeFragments();
+            Bundle bundle = new Bundle();
+            bundle.putInt("lay", lay);
+            if(finishedMudtFragment.getArguments() == null)
+                finishedMudtFragment.setArguments(bundle);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(subContent.getId(), finishedMudtFragment).commit();
+        }
+    }
+
+    /*public void showBtnsLay(){
+        if(btns_lay != null)
+            btns_lay.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBtnsLay(){
+        if(btns_lay != null)
+            btns_lay.setVisibility(View.GONE);
     }*/
-
 }

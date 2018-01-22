@@ -107,7 +107,7 @@ public class FinishMudDialog extends DialogFragment {
 
     public void getResponse(String result) {
         Singleton.dissmissLoad();
-        Singleton.getMainActivity().initMainFragment();
+        Singleton.getMainActivity().initMapFragment();
         dismiss();
     }
 

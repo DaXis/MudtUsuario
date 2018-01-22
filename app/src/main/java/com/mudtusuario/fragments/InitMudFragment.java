@@ -54,7 +54,7 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
     private LinearLayout past_lay, current_lay, next_lay;
     public static String dayOfWeek, dayMonth;
     public static long currentLong;
-    public static int currentHour, currentMin;
+    public static int currentHour, currentMin=-1;
     private EditText piso_carga, mudt_desc, piso_desc;
     private Button solic_btn;
     private ViewPager subContent;
@@ -80,22 +80,24 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
         Singleton.setCurrentFragment(this);
 
         Singleton.getActionButon().setVisibility(View.INVISIBLE);
-        Singleton.getActionText().setText("Requisitos");
+        Singleton.getActionText().setText("Registro");
         Singleton.getActionText().setVisibility(View.VISIBLE);
         Singleton.getToolLogo().setVisibility(View.GONE);
         Singleton.getMenuBtn().setImageResource(R.drawable.ic_back);
 
         Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
                 getActivity().findViewById(R.id.left_drawer));
+
+        if(subContent != null)
+            initUnitsData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.init_mud_frag, container, false);
 
-        initUnitsData();
-
         subContent = (ViewPager)rootView.findViewById(R.id.subContent);
+        initUnitsData();
         subContent.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -119,8 +121,10 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
         piso_desc = (EditText)rootView.findViewById(R.id.piso_desc);
 
         elev_carga = (TextView)rootView.findViewById(R.id.elev_carga);
+        elev_carga.setText("No");
         elev_carga.setOnClickListener(this);
         elev_desc = (TextView)rootView.findViewById(R.id.elev_desc);
+        elev_desc.setText("No");
         elev_desc.setOnClickListener(this);
 
         carga_dir = (TextView)rootView.findViewById(R.id.carga_dir);
@@ -363,8 +367,16 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
         //long nextH = currentH + Singleton.hourLong;
         int pastH = hour -1;
         int nextH = hour +1;
-        hour_past.setText(""+pastH);
-        hour_next.setText(""+nextH);
+
+        if(hour == 0)
+            hour_past.setText("11");
+        else
+            hour_past.setText(""+pastH);
+
+        if(hour == 24)
+            hour_next.setText("0");
+        else
+            hour_next.setText(""+nextH);
 
         long currentM = min*Singleton.minLong;
         long pastM = currentM - Singleton.minLong;
@@ -388,38 +400,44 @@ public class InitMudFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean validations(){
-        if(currentHour != 0){
-            if(piso_carga.getText().length() != 0){
-                if(!elev_carga.getText().toString().contains("?")){
-                    if(piso_desc.getText().length() != 0){
-                        if(!elev_desc.getText().toString().contains("?")){
-                            if(mudt_desc.getText().length() != 0){
-                                if(unitObj != null){
-                                    initAltaMudtConnect();
+        if(piso_carga.getText().length() != 0){
+            if(elev_carga.getText().length() == 2){
+                if(currentHour != 0){
+                    if(currentMin >= 0){
+                        if(piso_desc.getText().length() != 0){
+                            if(elev_desc.getText().length() == 2){
+                                if(mudt_desc.getText().length() != 0){
+                                    if(unitObj != null){
+                                        Singleton.showCustomDialog(getFragmentManager(),
+                                                unitObj.unit_desc, "¿Desea continuar con el tipo de unidad seleccionada?", "Continuar", 3);
+                                    } else
+                                        Singleton.showCustomDialog(getFragmentManager(),
+                                                "¡Atención!", "Debes seleccionar el tipo de unidad que requieres", "Continuar", 0);
                                 } else
                                     Singleton.showCustomDialog(getFragmentManager(),
-                                            "¡Atención!", "Debes seleccionar el tipo de unidad que requieres", "Continuar", 0);
+                                            "¡Atención!", "Debes proporcionarnos una descripción del inmueble", "Continuar", 0);
                             } else
                                 Singleton.showCustomDialog(getFragmentManager(),
-                                        "¡Atención!", "Debes proporcionarnos una descripción del inmueble", "Continuar", 0);
+                                        "¡Atención!", "Debes indicarnos si se tiene elevador de descarga", "Continuar", 0);
                         } else
                             Singleton.showCustomDialog(getFragmentManager(),
-                                    "¡Atención!", "Debes indicarnos si se tiene elevador de descarga", "Continuar", 0);
+                                    "¡Atención!", "Debes proporcionar el piso de descarga", "Continuar", 0);
                     } else
                         Singleton.showCustomDialog(getFragmentManager(),
-                                "¡Atención!", "Debes proporcionar el piso de descarga", "Continuar", 0);
+                                "¡Atención!", "Debes indicar el minuto en el que iniciara tu servicio", "Continuar", 0);
                 } else
                     Singleton.showCustomDialog(getFragmentManager(),
-                            "¡Atención!", "Debes indicarnos si se tiene elevador de carga", "Continuar", 0);
+                            "¡Atención!", "Debes seleccionar la hora en la que iniciara tu servicio", "Continuar", 0);
             } else
                 Singleton.showCustomDialog(getFragmentManager(),
-                        "¡Atención!", "Debes proporcionar el piso de carga", "Continuar", 0);
-        }
-
+                        "¡Atención!", "Debes indicarnos si se tiene elevador de carga", "Continuar", 0);
+        } else
+            Singleton.showCustomDialog(getFragmentManager(),
+                    "¡Atención!", "Debes proporcionar el piso de carga", "Continuar", 0);
         return false;
     }
 
-    private void initAltaMudtConnect(){
+    public void initAltaMudtConnect(){
         Singleton.showLoadDialog(getFragmentManager());
         try {
             JSONObject jsonObject = new JSONObject();

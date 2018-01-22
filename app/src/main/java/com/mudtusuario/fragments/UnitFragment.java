@@ -47,10 +47,10 @@ public class UnitFragment extends Fragment {
         Singleton.loadUnitImage(unitObj.unit_pic, imageFull, progress);
 
         TextView unidad_type = (TextView)rootView.findViewById(R.id.unidad_type);
-        unidad_type.setText(unitObj.unit_desc);
+        unidad_type.setText(unitObj.SGTipoUnidadNomen);
 
         TextView unidad_cap = (TextView)rootView.findViewById(R.id.unidad_cap);
-        unidad_cap.setText("3.5 Toneladas");
+        unidad_cap.setText(unitObj.unit_desc);
 
         return rootView;
     }

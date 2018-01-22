@@ -28,7 +28,7 @@
     <string name="elevador">Elevador de carga</string>
     <string name="desc">Descripción de mobiliario</string>
     <string name="detail_ubc_b">Destino</string>
-    <string name="aprox">COSTO</string>
+    <string name="aprox">Costo</string>
     <string name="btn_init">INICIAR PROCESO</string>
     <string name="hist_muds">HISTORIAL DE MUDANZAS</string>
     <!--<string name="MAP_API">AIzaSyDpbgp6w7PXROQzRnZX1P1Sd_9P3V85ucw</string>-->
@@ -61,7 +61,7 @@
     <string name="apm_hint">Apellido Materno</string>
     <string name="user_hint">Usuario</string>
     <string name="menu_solis">Solicitar</string>
-    <string name="menu_mi_mud">Mi mudanza</string>
+    <string name="menu_mi_mud">Mis mudanzas</string>
     <string name="menu_guia_mud">Guía de mudanza</string>
     <string name="init_point">Punto de partida</string>
     <string name="end_point">Punto de descarga</string>
@@ -98,13 +98,16 @@
     <string name="add">Agregar</string>
     <string name="pago_dialog_5">Nombre del titular</string>
     <string name="add_target">Agregar tarjeta</string>
-    <string name="pagar">REALIZAR PAGO</string>
+    <string name="pagar">Pendiente de pago</string>
     <string name="pross_mud">MUDANZAS EN PROCESO</string>
     <string name="desing">Su mudanza aun no ha sido aprobada</string>
-    <string name="curso">EN CURSO</string>
-    <string name="cancelado">CANCELADO</string>
-    <string name="concluido">CONCLUIDA</string>
-    <string name="pagada">PAGADA</string>
-    <string name="pendiente">PENDIENTE POR ACEPTAR</string>
-    <string name="operador">OPERADOR CONFIRMADO</string>
+    <string name="curso">En curso</string>
+    <string name="cancelado">Cancelada</string>
+    <string name="concluido">Concluida</string>
+    <string name="pagada">Pagada</string>
+    <string name="pendiente">Pendiente por aceptar</string>
+    <string name="operador">Asignado</string>
+    <string name="in_process">En proceso</string>
+    <string name="finished">Terminadas</string>
+    <string name="detail">Detalle</string>
 </resources>

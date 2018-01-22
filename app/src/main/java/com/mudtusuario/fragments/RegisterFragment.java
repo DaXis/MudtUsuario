@@ -18,10 +18,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     private int lay;
-    private EditText name, app, apm, email, lada, movil, pass, user, pass_confirm;
+    private EditText name, app, apm, email, movil, pass, user, pass_confirm;
     private Button regis_btn;
     private ImageView pic;
 
@@ -55,7 +58,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         app = (EditText)rootView.findViewById(R.id.app);
         apm = (EditText)rootView.findViewById(R.id.apm);
         email = (EditText)rootView.findViewById(R.id.email);
-        lada = (EditText)rootView.findViewById(R.id.lada);
         movil = (EditText)rootView.findViewById(R.id.movil);
         pass = (EditText)rootView.findViewById(R.id.pass);
         user = (EditText)rootView.findViewById(R.id.user);
@@ -74,12 +76,55 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         public void onClick(View view) {
             switch(view.getId()){
                 case R.id.regis_btn:
-                    initConnection();
+                    validations();
                     break;
                 case R.id.pic:
-
                     break;
             }
+        }
+
+        private void validations(){
+            if(user.getText().length() > 0){
+                if(name.getText().length() > 0){
+                    if(app.getText().length() > 0){
+                        if(apm.getText().length() > 0){
+                            if(email.getText().length() > 0){
+                                if(validarEmail(email.getText().toString())){
+                                    if(movil.getText().length() > 0 && movil.getText().length() == 10){
+                                        if(pass.getText().length() > 0){
+                                            if(pass_confirm.getText().length() > 0){
+                                                if(pass_confirm.getText().toString().equals(pass.getText().toString())){
+                                                    initConnection();
+                                                } else
+                                                    Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                                            "La confirmación de tu contraseña no coincide con la proporcionada", "Aceptar", 0);
+                                            } else
+                                                Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                                        "Debes confirmar tu contraseña", "Aceptar", 0);
+                                        } else
+                                            Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                                    "Debes introducir una contraseña", "Aceptar", 0);
+                                    } else
+                                        Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                                "El numero telefónico debe ser de 10 dígitos", "Aceptar", 0);
+                                } else
+                                    Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                            "Debes introducir un correo electrónico valido", "Aceptar", 0);
+                            } else
+                                Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                        "Debes introducir un correo electrónico", "Aceptar", 0);
+                        } else
+                            Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                    "Debes itroducir tu apellido materno", "Aceptar", 0);
+                    } else
+                        Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                                "Debes introducir tu apellido paterno", "Aceptar", 0);
+                } else
+                    Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                            "Debes introducir tu nombre", "Aceptar", 0);
+            } else
+                Singleton.showCustomDialog(getFragmentManager(), "¡Atención!",
+                        "Debes introducir un nombre de usuario", "Aceptar", 0);
         }
 
         private void initConnection(){
@@ -90,7 +135,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 jsonObject.put("ApellidoPaterno", app.getText().toString());
                 jsonObject.put("ApellidoMaterno", apm.getText().toString());
                 jsonObject.put("Correo", email.getText().toString());
-                jsonObject.put("Telefono", lada.getText().toString()+movil.getText().length());
+                jsonObject.put("Telefono", movil.getText().length());
                 jsonObject.put("NombreUsuario", user.getText().toString());
                 jsonObject.put("Contrasenia", pass.getText().toString());
                 JSONObject ClienteDatos  = new JSONObject();
@@ -115,5 +160,17 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 e.printStackTrace();
             }
         }
+
+    private boolean validarEmail(String email){
+        Pattern pattern = Pattern
+                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+        Matcher mather = pattern.matcher(email);
+
+        if (mather.find() == true)
+            return true;
+        else
+            return false;
+    }
 
 }

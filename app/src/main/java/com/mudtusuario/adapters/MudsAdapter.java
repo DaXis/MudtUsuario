@@ -16,8 +16,10 @@ import android.widget.TextView;
 
 import com.mudtusuario.R;
 import com.mudtusuario.Singleton;
+import com.mudtusuario.fragments.FinishedMudtFragment;
 import com.mudtusuario.fragments.HistorialFragment;
 import com.mudtusuario.fragments.MainFragment;
+import com.mudtusuario.fragments.ProcessMudtFragment;
 import com.mudtusuario.objs.MudObj;
 
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class MudsAdapter extends BaseAdapter {
 
         final Button info = ViewHolder.get(convertView, R.id.info);
 
-        if(fragment.getClass() == MainFragment.class){
+        /*if(fragment.getClass() == HistorialFragment.class){
             if(array.get(position).MudanzaEstatusServicio != 6){
                 info.setBackgroundResource(R.drawable.btn_bg);
                 info.setTextColor(fragment.getActivity().getResources().getColor(R.color.text_icons));
@@ -79,9 +81,12 @@ public class MudsAdapter extends BaseAdapter {
                 info.setBackgroundResource(R.drawable.wth_btn);
                 info.setTextColor(fragment.getActivity().getResources().getColor(R.color.primary_color));
             }
-        }
+        }*/
 
-        info.setOnTouchListener(new View.OnTouchListener() {
+        info.setBackgroundResource(R.drawable.btn_bg);
+        info.setTextColor(fragment.getActivity().getResources().getColor(R.color.text_icons));
+
+        /*info.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 switch(motionEvent.getAction()){
@@ -94,18 +99,37 @@ public class MudsAdapter extends BaseAdapter {
                 }
                 return false;
             }
-        });
+        });*/
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(fragment.getClass() == MainFragment.class) {
-                    ((MainFragment) fragment).initDetail((MudObj) getItem(position));
+                if(Singleton.getCurrentFragment().getClass() == HistorialFragment.class) {
+                    //((HistorialFragment) Singleton.getHistFragment()).hideBtnsLay();
                 }
-                if(fragment.getClass() == HistorialFragment.class) {
-                    ((HistorialFragment) fragment).initDetail((MudObj) getItem(position));
+                if(fragment.getClass() == ProcessMudtFragment.class) {
+                    ((ProcessMudtFragment) fragment).initDetail((MudObj) getItem(position));
+                }
+                if(fragment.getClass() == FinishedMudtFragment.class) {
+                    ((FinishedMudtFragment) fragment).initDetail((MudObj) getItem(position));
                 }
             }
         });
+
+        TextView estatus = ViewHolder.get(convertView, R.id.estatus);
+        if(array.get(position).MudanzaEstatus == 5 || array.get(position).MudanzaEstatus == 6 || array.get(position).MudanzaEstatus == 7)
+            estatus.setText(Singleton.getMainActivity().getResources().getString(R.string.pagar));
+        else if(array.get(position).MudanzaEstatus == 0)
+            estatus.setText(Singleton.getMainActivity().getResources().getString(R.string.pendiente));
+        else if(array.get(position).MudanzaEstatus == 1)
+            estatus.setText(Singleton.getMainActivity().getResources().getString(R.string.pagar));
+        else if(array.get(position).MudanzaEstatus == 2)
+            estatus.setText(Singleton.getMainActivity().getResources().getString(R.string.curso));
+        else if(array.get(position).MudanzaEstatus == 3)
+            estatus.setText(Singleton.getMainActivity().getResources().getString(R.string.cancelado));
+        else if(array.get(position).MudanzaEstatus == 4)
+            estatus.setText(Singleton.getMainActivity().getResources().getString(R.string.concluido));
+        else if(array.get(position).MudanzaEstatus == 8)
+            estatus.setText(Singleton.getMainActivity().getResources().getString(R.string.pagada));
 
         return convertView;
     }

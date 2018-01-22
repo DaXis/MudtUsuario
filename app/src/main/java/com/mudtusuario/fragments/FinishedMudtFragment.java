@@ -7,12 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.mudtusuario.R;
 import com.mudtusuario.Singleton;
 import com.mudtusuario.adapters.MudsAdapter;
-import com.mudtusuario.objs.ActiveObj;
 import com.mudtusuario.objs.MudObj;
 import com.mudtusuario.utils.ConnectToServer;
 
@@ -22,13 +20,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainFragment extends Fragment implements View.OnClickListener {
+public class FinishedMudtFragment extends Fragment implements View.OnClickListener {
 
-    private int lay;
+    private int lay, arg = 1;
     private ListView mudts;
     private ArrayList<MudObj> array = new ArrayList<>();
     private MudsAdapter adapter;
     private String title;
+    //private Button btn_act, btn_ant;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,22 +45,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume(){
         super.onResume();
-        Singleton.setCurrentFragment(this);
-
-        Singleton.getActionButon().setVisibility(View.INVISIBLE);
-        Singleton.getActionText().setText("");
-        Singleton.getMenuBtn().setImageResource(R.drawable.ic_menu);
-        Singleton.getDrawerLayout().setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, getActivity().findViewById(R.id.left_drawer));
-
-        /*if(array.size() > 0){
-            for(int i = 0; i < array.size(); i++){
-                if(array.get(i).MudanzaEstatusServicio == 0){
-                    ActiveObj activeObj = new ActiveObj();
-                    activeObj.idMud = array.get(i).MudanzaFolioServicio;
-                    Singleton.setIsActive(activeObj);
-                }
-            }
-        }*/
+        Singleton.setSubCurrentFragment(this);
+        //((HistorialFragment) Singleton.getCurrentFragment()).showBtnsLay();
     }
 
     @Override
@@ -70,6 +55,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         /*TextView title = (TextView)rootView.findViewById(R.id.title);
         title.setText(this.title);*/
+
+        /*btn_act = (Button)rootView.findViewById(R.id.btn_act);
+        btn_act.setOnClickListener(this);
+
+        btn_ant = (Button)rootView.findViewById(R.id.btn_ant);
+        btn_ant.setOnClickListener(this);*/
 
         mudts = (ListView)rootView.findViewById(R.id.mudts);
         adapter = new MudsAdapter(this, array);
@@ -82,7 +73,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-
+            /*case R.id.btn_act:
+                //btnsBg(0);
+                break;
+            case R.id.btn_ant:
+                //btnsBg(1);
+                break;*/
         }
     }
 
@@ -90,9 +86,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         Singleton.showLoadDialog(getFragmentManager());
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("OperadorGAMId", Singleton.getUSerObj().GUID);
-            jsonObject.put("Historial", "0");
-            Object[] objs = new Object[]{"GetMudanzaListado", 4, this, jsonObject};
+            jsonObject.put("ClienteId", Singleton.getUSerObj().GUID);
+            jsonObject.put("Historial", arg);
+            Object[] objs = new Object[]{"GetMudanzaListadoCliente", 7, this, jsonObject};
             ConnectToServer connectToServer = new ConnectToServer(objs);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -113,18 +109,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 mudObj.MudanzaDireccionCarga = aux.getString("MudanzaDireccionCarga");
                 mudObj.MudanzaDireccionDescarga = aux.getString("MudanzaDireccionDescarga");
                 mudObj.MudanzaEstatusServicio = aux.getInt("MudanzaEstatusServicio");
+                mudObj.MudanzaEstatus = aux.getInt("MudanzaEstatus");
                 mudObj.MudanzaFechaSolicitud = aux.getString("MudanzaFechaSolicitud");
                 mudObj.MudanzaFolioServicio = aux.getString("MudanzaFolioServicio");
                 mudObj.MudanzaHoraSolicitud = aux.getString("MudanzaHoraSolicitud");
-                mudObj.TipoUnidadDescrip = aux.getString("TipoUnidadDescrip");
-                mudObj.UnidadPlacas = aux.getString("UnidadPlacas");
-
-                /*if(mudObj.MudanzaEstatusServicio == 0){
-                    ActiveObj activeObj = new ActiveObj();
-                    activeObj.idMud = mudObj.MudanzaFolioServicio;
-                    Singleton.setIsActive(activeObj);
-                }*/
-
+                mudObj.TipoUnidadDescrip = aux.getString("SGTipoUnidadDesc");
+                mudObj.UnidadFoto = aux.getString("SGTipoUnidadFoto");
+                mudObj.UnidadPlacas = aux.getString("SGTipoUnidadId");
                 array.add(mudObj);
             }
             adapter.updateAdapter(array);
@@ -138,8 +129,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         Bundle bundle = new Bundle();
         bundle.putSerializable("mudObj", mudObj);
         bundle.putInt("lay", lay);
-        bundle.putString("title", "Detalle de viaje");
-        bundle.putString("root", MainFragment.class.getName());
+        bundle.putString("title", "Solicitud");
+        bundle.putString("root", HistorialFragment.class.getName());
         ViajeDetailFragment newItemFragment = new ViajeDetailFragment();
         newItemFragment.setArguments(bundle);
         Singleton.setCurrentFragment(newItemFragment);
@@ -148,4 +139,30 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 .addToBackStack(null)
                 .commit();
     }
+
+    /*private void btnsBg(int arg){
+        switch(arg){
+            case 0:
+                btn_act.setBackgroundResource(R.drawable.orange_rect);
+                btn_ant.setBackgroundResource(R.drawable.white_rect);
+
+                btn_act.setTextColor(getResources().getColor(R.color.text_icons));
+                btn_ant.setTextColor(getResources().getColor(R.color.primary_color));
+
+                this.arg = 0;
+                initConnection();
+                break;
+            case 1:
+                btn_act.setBackgroundResource(R.drawable.white_rect);
+                btn_ant.setBackgroundResource(R.drawable.orange_rect);
+
+                btn_act.setTextColor(getResources().getColor(R.color.primary_color));
+                btn_ant.setTextColor(getResources().getColor(R.color.text_icons));
+
+                this.arg = 1;
+                initConnection();
+                break;
+        }
+    }*/
+
 }

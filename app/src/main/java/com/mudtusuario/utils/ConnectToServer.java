@@ -7,6 +7,7 @@ import com.mudtusuario.Singleton;
 import com.mudtusuario.dialogs.FinishMudDialog;
 import com.mudtusuario.dialogs.PagoDialog;
 import com.mudtusuario.dialogs.RecoverDialog;
+import com.mudtusuario.fragments.FinishedMudtFragment;
 import com.mudtusuario.fragments.HistorialFragment;
 import com.mudtusuario.fragments.InitMudFragment;
 import com.mudtusuario.fragments.LoginFragment;
@@ -15,6 +16,7 @@ import com.mudtusuario.fragments.MapFragment;
 import com.mudtusuario.fragments.MudtDetailFragment;
 import com.mudtusuario.fragments.PagosFragment;
 import com.mudtusuario.fragments.ProcessFragment;
+import com.mudtusuario.fragments.ProcessMudtFragment;
 import com.mudtusuario.fragments.RegisterFragment;
 import com.mudtusuario.fragments.SolicitudFragment;
 import com.mudtusuario.fragments.ViajeDetailFragment;
@@ -466,13 +468,13 @@ public class ConnectToServer {
                 ((LoginFragment) o).getResponseData(result);
                 break;
             case 2:
-                ((MainFragment) o).getResponse(result);
+                ((ProcessMudtFragment) o).getResponse(result);
                 break;
             case 3:
                 ((ViajeDetailFragment) o).getResponse(result);
                 break;
             case 4:
-                ((HistorialFragment) o).getResponse(result);
+                ((MainFragment) o).getResponse(result);
                 break;
             case 5:
                 ((SolicitudFragment) o).getResponse(result);
@@ -481,7 +483,7 @@ public class ConnectToServer {
                 ((ProcessFragment) o).getResponse(result);
                 break;
             case 7:
-                //((ProcessFragment) o).getPicResponse(result);
+                ((FinishedMudtFragment) o).getResponse(result);
                 break;
             case 8:
                 ((FinishMudDialog) o).getResponse(result);

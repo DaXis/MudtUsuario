@@ -132,6 +132,7 @@ public class MudtDetailFragment extends Fragment implements View.OnClickListener
         loc_b.setText(mudObj.des_dir);
 
         dist = (TextView)rootView.findViewById(R.id.dist);
+        dist.setText("Distancia aproximada: "+mudObj.MudanzaDistanciaAproximada);
 
         piso_b = (TextView)rootView.findViewById(R.id.piso_b);
         piso_b.setText("Piso "+mudObj.piso_des);

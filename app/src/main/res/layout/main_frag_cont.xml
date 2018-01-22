@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/text_icons">
+
+    <LinearLayout
+        android:id="@+id/btns_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/primary_color">
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/procss"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:layout_height="wrap_content"
+            android:text="@string/in_process"
+            android:background="@drawable/osc_gray_rect"
+            android:textColor="@color/text_icons"
+            android:textAllCaps="false"/>
+
+        <com.mudtusuario.custom.CustomButton
+            android:id="@+id/fnshd"
+            android:layout_width="0dp"
+            android:layout_weight="0.33"
+            android:layout_height="wrap_content"
+            android:text="@string/finished"
+            android:background="@drawable/gray_rect"
+            android:textColor="@color/text_icons"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/subContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
